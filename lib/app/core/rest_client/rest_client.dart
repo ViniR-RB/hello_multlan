@@ -24,7 +24,7 @@ class RestClient extends DioForNative {
   }
 
   RestClient get unauth {
-    options.extra["DIO_AUTH_KEY"] = true;
+    options.extra["DIO_AUTH_KEY"] = false;
     return this;
   }
 }
