@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:hellomultlan/app/core/configuration/configuration.dart';
+import 'package:hellomultlan/app/core/rest_client/interceptors/auth_interceptor.dart';
 
 class RestClient extends DioForNative {
   RestClient()
@@ -16,6 +17,7 @@ class RestClient extends DioForNative {
         requestBody: true,
         responseBody: true,
       ),
+      AuthInterceptor(),
     ]);
   }
   RestClient get auth {

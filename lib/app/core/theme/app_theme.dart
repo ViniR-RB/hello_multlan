@@ -13,6 +13,7 @@ sealed class AppTheme {
         ),
       ),
     ),
+    appBarTheme: const AppBarTheme(centerTitle: true),
     inputDecorationTheme: InputDecorationTheme(
         border: _border,
         errorBorder: _border.copyWith(

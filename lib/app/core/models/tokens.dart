@@ -6,7 +6,7 @@ class Tokens {
     required this.refreshToken,
   });
 
-  factory Tokens.toMap(Map map) {
+  factory Tokens.fromMap(Map map) {
     return switch (map) {
       {
         "access_token": final String acessToken,

@@ -21,7 +21,7 @@ class AuthGatewayImpl implements AuthGateway {
         "email": email,
         "password": password,
       });
-      return Sucess(Tokens.toMap(data));
+      return Sucess(Tokens.fromMap(data));
     } on DioException catch (e, s) {
       if (e.response?.statusCode == 403) {
         const message = "Email ou senha Incorretos";
