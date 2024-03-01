@@ -52,7 +52,7 @@ class _RegisterPageState extends State<RegisterPage> with MessageViewMixin {
                       controller: _nameEC,
                       validator: Validatorless.multiple([
                         Validatorless.required("Campo Requerido"),
-                        Validatorless.min(6, "Campo Precisa de 6 caracteres"),
+                        Validatorless.min(8, "Campo Precisa de 8 caracteres"),
                       ]),
                       decoration: const InputDecoration(labelText: "Nome"),
                     ),

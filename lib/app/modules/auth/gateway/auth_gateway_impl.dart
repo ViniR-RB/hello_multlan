@@ -15,9 +15,23 @@ class AuthGatewayImpl implements AuthGateway {
 
   @override
   Future<Either<Tokens, GatewayException>> login(
-      String email, String password) {
-    // TODO: implement login
-    throw UnimplementedError();
+      String email, String password) async {
+    try {
+      final Response(:Map data) = await _rest.unauth.post("auth", data: {
+        "email": email,
+        "password": password,
+      });
+      return Sucess(Tokens.toMap(data));
+    } on DioException catch (e, s) {
+      if (e.response?.statusCode == 403) {
+        const message = "Email ou senha Incorretos";
+        log(message, error: e, stackTrace: s);
+        return Failure(GatewayException(message));
+      }
+      const message = "Erro ao fazer Login";
+      log(message, error: e, stackTrace: s);
+      return Failure(GatewayException(message));
+    }
   }
 
   @override

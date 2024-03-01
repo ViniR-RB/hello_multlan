@@ -35,6 +35,7 @@ dependencies:
     sdk: flutter
   flutter_getit: ^2.0.0
   loading_animation_widget: ^1.2.0+4
+  shared_preferences: ^2.2.2
   signals_flutter: ^4.5.0
   top_snackbar_flutter: ^3.1.0
   validatorless: ^1.2.3

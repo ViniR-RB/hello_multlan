@@ -1,5 +1,6 @@
 import 'package:asyncstate/asyncstate.dart';
 import 'package:hellomultlan/app/core/either/either.dart';
+import 'package:hellomultlan/app/core/exceptions/gateway_exception.dart';
 import 'package:hellomultlan/app/core/helpers/messages.dart';
 import 'package:hellomultlan/app/modules/auth/gateway/auth_gateway.dart';
 import 'package:signals_flutter/signals_flutter.dart';
@@ -16,7 +17,7 @@ class RegisterController with MessageStateMixin {
   void toogleVisiblePassword() {
     _isObscurePassword.forceUpdate(!_isObscurePassword.value);
   }
-
+ 
   final _isSuccessRegister = ValueSignal<bool>(false);
   bool get isSuccessRegister => _isSuccessRegister();
 
@@ -28,8 +29,8 @@ class RegisterController with MessageStateMixin {
       case Sucess():
         showSuccess("Sucesso ao Cadastrar Usuário");
         _isSuccessRegister.forceUpdate(true);
-      case Failure(:final exception):
-        print(exception.message);
+      case Failure(exception: GatewayException(message: final message)):
+        showError(message);
     }
   }
 }

@@ -6,10 +6,10 @@ class Tokens {
     required this.refreshToken,
   });
 
-  factory Tokens.fromMap(Map<String, dynamic> map) {
+  factory Tokens.toMap(Map map) {
     return switch (map) {
       {
-        "acess_token": final String acessToken,
+        "access_token": final String acessToken,
         "refresh_token": final String refreshToken
       } =>
         Tokens(
