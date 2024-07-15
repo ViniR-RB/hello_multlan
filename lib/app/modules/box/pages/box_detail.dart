@@ -26,6 +26,7 @@ class BoxDetail extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                Text(boxModel.id),
                 Container(
                   width: width,
                   height: height * 0.5,
@@ -33,7 +34,7 @@ class BoxDetail extends StatelessWidget {
                   child: InteractiveViewer(
                     maxScale: 5,
                     child: Image.network(
-                      boxModel.imageUrl,
+                      boxModel.image,
                       fit: BoxFit.scaleDown,
                     ),
                   ),
@@ -44,14 +45,21 @@ class BoxDetail extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Espaço total: ${boxModel.totalClient}"),
+                    Text("Espaço total: ${boxModel.freeSpace}"),
                     const SizedBox(
                       width: 16,
                     ),
-                    Text("Clientes Ativos: ${boxModel.activatedClient}"),
+                    Text("Clientes Ativos: ${boxModel.filledSpace}"),
                   ],
                 ),
-                Text(boxModel.reference)
+                Wrap(
+                  children: [
+                    Text("Clientes: ${boxModel.listUsers}"),
+                    const SizedBox(
+                      width: 16,
+                    ),
+                  ],
+                ),
               ],
             ),
           ),

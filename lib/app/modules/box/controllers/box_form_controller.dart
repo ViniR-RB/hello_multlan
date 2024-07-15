@@ -2,6 +2,9 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:asyncstate/asyncstate.dart';
+import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:hellomultlan/app/core/either/either.dart';
 import 'package:hellomultlan/app/core/exceptions/gateway_exception.dart';
 import 'package:hellomultlan/app/core/exceptions/geolocator_service_exception.dart';
@@ -18,6 +21,9 @@ class BoxFormController with MessageStateMixin {
   final GeolocatorService _geolocatorService;
   final _fileImage = ValueSignal<File>(File(""));
   File get fileImage => _fileImage();
+  final ValueSignal<List<TextEditingController>> listClient =
+      ValueSignal<List<TextEditingController>>([]);
+  final selectedGps = ValueSignal<List<bool>>([true, false]);
 
   double _latitude = 0.0;
   double _longitude = 0.0;
@@ -38,18 +44,33 @@ class BoxFormController with MessageStateMixin {
     }
   }
 
-  Future<void> sendBox(int activatedClient, File imageFile, String reference,
-      int totalClient) async {
-    if (imageFile.path.isEmpty) {
+  Future<void> sendBox(
+    int filledSpace,
+    int freeSpace,
+    String address,
+  ) async {
+    if (fileImage.path.isEmpty) {
       showInfo("Selecione uma imagem");
+      return;
+    }
+    if (filledSpace > listClient.value.length) {
+      showError(
+          "Quantidade de Nome de Clientes deve ser igual ao número de clientes ativos");
+      return;
+    }
+    if (selectedGps.value[0]) {
+      await getLocation();
+    } else {
+      await getLocationByAddres(address);
     }
     final boxSaved = (
-      reference: reference,
-      activatedClient: activatedClient,
-      imageFile: imageFile,
+      filledSpace: filledSpace,
+      freeSpace: freeSpace,
       latitude: _latitude,
       longitude: _longitude,
-      totalClient: totalClient
+      listUser: List.generate(
+          listClient.value.length, (index) => listClient.value[index].text),
+      file: fileImage
     );
     final result = await _gateway.saveBox(boxSaved).asyncLoader();
 
@@ -63,22 +84,31 @@ class BoxFormController with MessageStateMixin {
 
   Future<void> getLocation() async {
     try {
-      _geolocatorService.determinePosition().then((value) => {
-            _latitude = value.latitude,
-            _longitude = value.longitude,
-          });
+      final Position(:latitude, :longitude) =
+          await _geolocatorService.determinePosition();
+      _latitude = latitude;
+      _longitude = longitude;
     } on GeolocatorServiceException catch (e, s) {
       log(e.message, error: e, stackTrace: s);
       showError(e.message);
     }
   }
 
+  void addNewClient() {
+    listClient.forceUpdate([...listClient.value, TextEditingController()]);
+  }
+
+  void removeClient(int index) {
+    listClient.value.removeAt(index);
+    listClient.set(force: true, [...listClient.value]);
+  }
+
   Future<void> getLocationByAddres(String address) async {
     try {
-      _geolocatorService.determinePositionByAddress(address).then((value) => {
-            _latitude = value.latitude,
-            _longitude = value.longitude,
-          });
+      final Location(:latitude, :longitude) =
+          await _geolocatorService.determinePositionByAddress(address);
+      _latitude = latitude;
+      _longitude = longitude;
     } on GeolocatorServiceException catch (e, s) {
       log(e.message, error: e, stackTrace: s);
       showError(e.message);

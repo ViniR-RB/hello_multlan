@@ -9,8 +9,8 @@ class Tokens {
   factory Tokens.fromMap(Map map) {
     return switch (map) {
       {
-        "access_token": final String acessToken,
-        "refresh_token": final String refreshToken
+        "accessToken": final String acessToken,
+        "refreshToken": final String refreshToken
       } =>
         Tokens(
           acessToken: acessToken,

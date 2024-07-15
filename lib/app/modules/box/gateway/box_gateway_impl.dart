@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:hellomultlan/app/core/configuration/configuration.dart';
 import 'package:hellomultlan/app/core/either/either.dart';
 import 'package:hellomultlan/app/core/either/unit.dart';
 import 'package:hellomultlan/app/core/exceptions/gateway_exception.dart';
@@ -19,34 +18,23 @@ class BoxGatewayImpl implements BoxGateway {
   Future<Either<Unit, GatewayException>> saveBox(CreateBoxDto boxSaved) async {
     try {
       final CreateBoxDto(
-        imageFile: imageFile,
-        activatedClient: activatedClient,
-        totalClient: totalClient,
-        latitude: latitude,
-        longitude: longitude,
-        reference: reference,
+        :filledSpace,
+        :freeSpace,
+        :latitude,
+        :longitude,
+        :file,
+        :listUser
       ) = boxSaved;
-      final Response(:data as Map) = await _restClient.auth.post("uploads",
-          data: FormData.fromMap({
-            "file": await MultipartFile.fromFile(
-              imageFile.path,
-              filename: "image.png",
-            ),
-          }));
-      final String image =
-          Configuration.baseUrl.substring(0, Configuration.baseUrl.length - 1) +
-              data['url'];
-      await _restClient.auth.post(
-        "boxs",
-        data: {
-          'reference': reference,
-          'activated_client': activatedClient,
-          'total_client': totalClient,
-          'latitude': latitude,
-          'longitude': longitude,
-          "image": image
-        },
-      );
+      final formData = FormData.fromMap({
+        "filledSpace": filledSpace,
+        "freeSpace": freeSpace,
+        "latitude": latitude,
+        "longitude": longitude,
+        "listUser": listUser,
+        "file": await MultipartFile.fromFile(file.path,
+            filename: file.uri.toString()),
+      });
+      await _restClient.auth.post("api/box", data: formData);
 
       return Sucess(unit);
     } on DioException catch (e, s) {
@@ -59,7 +47,7 @@ class BoxGatewayImpl implements BoxGateway {
   @override
   Future<Either<List<BoxModel>, GatewayException>> getAllBoxs() async {
     try {
-      final Response(:data as List) = await _restClient.auth.get("boxs");
+      final Response(:data as List) = await _restClient.auth.get("/api/box");
       final List<BoxModel> boxList =
           data.map((e) => BoxModel.fromMap(e)).toList();
       return Sucess(boxList);

@@ -1,10 +1,10 @@
 import 'dart:io';
 
 typedef CreateBoxDto = ({
-  String reference,
-  int activatedClient,
-  int totalClient,
+  int filledSpace,
+  int freeSpace,
   double latitude,
   double longitude,
-  File imageFile,
+  List<String> listUser,
+  File file,
 });

@@ -61,8 +61,8 @@ class _BoxMapState extends State<BoxMap> {
                         (boxElement) => Marker(
                             width: 50,
                             height: 50,
-                            point: LatLng(
-                                boxElement.latitude, boxElement.longitude),
+                            point: LatLng(double.parse(boxElement.latitude),
+                                double.parse(boxElement.longitude)),
                             child: Material(
                               color: Colors.transparent,
                               child: InkWell(
@@ -82,7 +82,7 @@ class _BoxMapState extends State<BoxMap> {
                       .toList(),
                 ),
               ),
-              CurrentLocationLayer()
+              /* CurrentLocationLayer() */
             ],
           ),
         ],

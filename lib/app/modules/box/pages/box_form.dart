@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:hellomultlan/app/core/helpers/messages.dart';
+import 'package:hellomultlan/app/core/theme/app_theme.dart';
 import 'package:hellomultlan/app/modules/box/controllers/box_form_controller.dart';
+import 'package:hellomultlan/app/modules/box/widgets/custom_text_field.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 import 'package:validatorless/validatorless.dart';
 
@@ -14,15 +15,13 @@ class BoxForm extends StatefulWidget {
 }
 
 class _BoxFormState extends State<BoxForm> with MessageViewMixin {
-  final selectedGps = ValueSignal<List<bool>>([true, false]);
   List<Widget> icons = <Widget>[
     const Icon(Icons.location_on),
     const Icon(Icons.location_off),
   ];
   final formKey = GlobalKey<FormState>();
-  final _referenceEC = TextEditingController();
-  final _totalClientsEC = TextEditingController();
-  final _totalClientsActivatedEC = TextEditingController();
+  final _totalClientsEC = TextEditingController(text: "0");
+  final _totalClientsActivatedEC = TextEditingController(text: "0");
   final _addressEC = TextEditingController();
 
   @override
@@ -35,20 +34,41 @@ class _BoxFormState extends State<BoxForm> with MessageViewMixin {
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Formulário de Caixa'),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: SizedBox(
-            height: size.height,
-            child: Form(
-              key: formKey,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+        body: Form(
+      key: formKey,
+      child: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            title: const Text("Criar Caixa"),
+            floating: true,
+            snap: true,
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    final valid = formKey.currentState?.validate() ?? false;
+                    if (valid) {
+                      widget.controller.sendBox(
+                          int.parse(_totalClientsActivatedEC.text),
+                          int.parse(_totalClientsEC.text),
+                          _addressEC.text);
+                    }
+                  },
+                  child: const Text("Criar Caixa"))
+            ],
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate(
+                [
+                  Row(
+                    children: [
+                      Text(
+                        "Imagem de Perfil",
+                        style: AppTheme.labelInput,
+                      ),
+                    ],
+                  ),
                   Watch.builder(
                     builder: (_) =>
                         switch (widget.controller.fileImage.path.isEmpty) {
@@ -100,40 +120,27 @@ class _BoxFormState extends State<BoxForm> with MessageViewMixin {
                         ),
                     },
                   ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    controller: _referenceEC,
-                    decoration: const InputDecoration(labelText: 'Referencia'),
-                    validator: Validatorless.required("Campo é requerido"),
-                  ),
+                  CustomTextField(
+                      label: "Total de Clientes",
+                      keyboardType: TextInputType.number,
+                      controller: _totalClientsEC,
+                      validator: Validatorless.multiple([
+                        Validatorless.required("Campo Requerido"),
+                      ])),
                   const SizedBox(
-                    height: 8,
+                    height: 24,
                   ),
-                  TextFormField(
-                    controller: _totalClientsEC,
-                    validator: Validatorless.required("Campo é requerido"),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                        labelText: 'Capacidade de Clientes'),
-                  ),
+                  CustomTextField(
+                      label: "Clientes Ativos",
+                      keyboardType: TextInputType.number,
+                      controller: _totalClientsActivatedEC,
+                      validator: Validatorless.multiple([
+                        Validatorless.required("Campo Requerido"),
+                        Validatorless.min(int.parse(_totalClientsEC.text),
+                            "Clientes Ativos não pode ser maior que o espaço disponível")
+                      ])),
                   const SizedBox(
-                    height: 8,
-                  ),
-                  TextFormField(
-                    controller: _totalClientsActivatedEC,
-                    validator: Validatorless.required("Campo é requerido"),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                        labelText: 'Total de Clientes Ativos'),
-                  ),
-                  const SizedBox(
-                    height: 8,
+                    height: 24,
                   ),
                   Watch.builder(
                     builder: (_) => Wrap(
@@ -144,8 +151,10 @@ class _BoxFormState extends State<BoxForm> with MessageViewMixin {
                           width: size.width * .6,
                           child: TextFormField(
                             controller: _addressEC,
-                            enabled: selectedGps.value[1] == true,
-                            validator: selectedGps.value[1] == true
+                            enabled:
+                                widget.controller.selectedGps.value[1] == true,
+                            validator: widget.controller.selectedGps.value[1] ==
+                                    true
                                 ? Validatorless.required("Campo é requerido")
                                 : null,
                             decoration: const InputDecoration(
@@ -158,8 +167,9 @@ class _BoxFormState extends State<BoxForm> with MessageViewMixin {
                         ToggleButtons(
                             direction: Axis.horizontal,
                             onPressed: (int index) {
-                              selectedGps.set(
-                                List<bool>.generate(selectedGps.value.length,
+                              widget.controller.selectedGps.set(
+                                List<bool>.generate(
+                                    widget.controller.selectedGps.value.length,
                                     (i) => i == index),
                                 force: true,
                               );
@@ -167,44 +177,64 @@ class _BoxFormState extends State<BoxForm> with MessageViewMixin {
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(8)),
                             selectedBorderColor: Colors.blue[700],
-                            isSelected: selectedGps.value,
+                            isSelected: widget.controller.selectedGps.value,
                             children: icons)
                       ],
                     ),
                   ),
                   const SizedBox(
-                    height: 8,
+                    height: 24,
                   ),
-                  SizedBox(
-                    width: size.width,
-                    height: 52,
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        final valid = formKey.currentState?.validate() ?? false;
-                        if (valid) {
-                          if (selectedGps.value[1] == true) {
-                            await widget.controller
-                                .getLocationByAddres(_addressEC.text);
-                          } else {
-                            await widget.controller.getLocation();
-                          }
-                          await widget.controller.sendBox(
-                            int.parse(_totalClientsActivatedEC.text),
-                            widget.controller.fileImage,
-                            _referenceEC.text,
-                            int.parse(_totalClientsEC.text),
-                          );
-                        }
-                      },
-                      child: const Text("Enviar"),
-                    ),
-                  )
+                  Row(
+                    children: [
+                      Text(
+                        "Clientes",
+                        style: AppTheme.labelInput,
+                      ),
+                      const Spacer(),
+                      TextButton(
+                        onPressed: () {
+                          widget.controller.addNewClient();
+                        },
+                        child: const Text("Adicionar Cliente"),
+                      )
+                    ],
+                  ),
                 ],
               ),
             ),
           ),
-        ),
+          Watch.builder(
+            builder: (context) => SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.only(
+                        left: 24.0, right: 24.0, bottom: 12.0),
+                    child: SizedBox(
+                      height: 52,
+                      child: TextFormField(
+                        validator: Validatorless.required("Campo Requerido"),
+                        controller: widget.controller.listClient.value[index],
+                        decoration: InputDecoration(
+                            suffix: IconButton(
+                          onPressed: () {
+                            widget.controller.removeClient(index);
+                          },
+                          icon: const Icon(Icons.remove_circle_outline),
+                        )),
+                        strutStyle: const StrutStyle(
+                            height: 1, forceStrutHeight: true, leading: 0),
+                      ),
+                    ),
+                  );
+                },
+                childCount: widget.controller.listClient.value.length,
+              ),
+            ),
+          ),
+        ],
       ),
-    );
+    ));
   }
 }

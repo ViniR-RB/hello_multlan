@@ -30,4 +30,10 @@ sealed class AppTheme {
   static ThemeData get darkTheme => _darkTheme;
 
   static ThemeData get lighTheme => _lighTheme;
+
+  static TextStyle labelInput = const TextStyle(
+      fontWeight: FontWeight.bold,
+      fontSize: 16,
+      color: Color(0xFF262626),
+      letterSpacing: 1.5);
 }
