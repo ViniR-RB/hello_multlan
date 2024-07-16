@@ -31,7 +31,8 @@ class BoxModule extends FlutterGetItModule {
         "/map": (_) => BoxMap(
               controller: Injector.get(),
             ),
-        "/form": (_) => BoxForm(
+        "/detail"
+            "/form": (_) => BoxForm(
               controller: Injector.get(),
             ),
       };

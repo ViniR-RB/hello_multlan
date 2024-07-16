@@ -26,7 +26,6 @@ class BoxDetail extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(boxModel.id),
                 Container(
                   width: width,
                   height: height * 0.5,
@@ -43,18 +42,50 @@ class BoxDetail extends StatelessWidget {
                   height: 16,
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Espaço total: ${boxModel.freeSpace}"),
+                    const Icon(Icons.area_chart),
                     const SizedBox(
-                      width: 16,
+                      width: 12,
                     ),
-                    Text("Clientes Ativos: ${boxModel.filledSpace}"),
+                    Text(boxModel.id),
                   ],
                 ),
-                Wrap(
+                Row(
                   children: [
-                    Text("Clientes: ${boxModel.listUsers}"),
+                    const Icon(
+                      Icons.people,
+                      size: 24,
+                    ),
+                    const SizedBox(
+                      width: 12,
+                    ),
+                    Text("Espaço total: ${boxModel.freeSpace}",
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w500)),
+                  ],
+                ),
+                Row(
+                  children: [
+                    const Icon(Icons.menu),
+                    const SizedBox(
+                      width: 12,
+                    ),
+                    Text(
+                      "Clientes Ativos: ${boxModel.filledSpace}",
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w500),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    const Icon(Icons.account_box),
+                    const SizedBox(
+                      width: 12,
+                    ),
+                    Text(boxModel.listUsers.toString(),
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w500)),
                     const SizedBox(
                       width: 16,
                     ),
