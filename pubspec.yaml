@@ -28,14 +28,13 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  asyncstate: ^2.1.1-dev.1
   cupertino_icons: ^1.0.2
   dio: ^5.4.1
   flutter:
     sdk: flutter
-  flutter_getit: ^2.0.0
   flutter_map: ^6.1.0
   flutter_map_location_marker: ^8.0.8
+  flutter_modular: ^6.0.4+1
   geocoding: ^2.2.0
   geolocator: ^11.0.0
   image_picker: ^1.0.7

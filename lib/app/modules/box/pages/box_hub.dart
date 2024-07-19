@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:hellomultlan/app/modules/box/widgets/card_item.dart';
 
 class BoxHub extends StatelessWidget {
@@ -15,13 +16,13 @@ class BoxHub extends StatelessWidget {
           children: [
             CardItem(
               label: "Ir Para o Mapa",
-              onTap: () => Navigator.of(context).pushNamed("/box/map"),
+              onTap: () => Modular.to.pushNamed("/box/map"),
               iconSuffix: Icons.map,
               color: const Color(0xffFFF6E7),
             ),
             CardItem(
               label: "Adicionar uma nova caixa",
-              onTap: () => Navigator.of(context).pushNamed("/box/form"),
+              onTap: () => Modular.to.pushNamed("/box/form"),
               iconSuffix: Icons.map,
               color: const Color(0xffE5FFE6),
             ),

@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_getit/flutter_getit.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:hellomultlan/app/core/core_module.dart';
 import 'package:hellomultlan/app/modules/auth/controller/login_controller.dart';
 import 'package:hellomultlan/app/modules/auth/controller/register_controller.dart';
 import 'package:hellomultlan/app/modules/auth/gateway/auth_gateway.dart';
@@ -7,27 +7,25 @@ import 'package:hellomultlan/app/modules/auth/gateway/auth_gateway_impl.dart';
 import 'package:hellomultlan/app/modules/auth/pages/login_page.dart';
 import 'package:hellomultlan/app/modules/auth/pages/register_page.dart';
 
-class AuthModule extends FlutterGetItModule {
+class AuthModule extends Module {
   @override
-  List<Bind<Object>> get bindings => [
-        Bind.lazySingleton(
-          (i) => RegisterController(authGateway: i()),
-        ),
-        Bind.lazySingleton(
-          (i) => LoginController(authGateway: i()),
-        ),
-        Bind.lazySingleton<AuthGateway>((i) => AuthGatewayImpl(i()))
-      ];
-  @override
-  String get moduleRouteName => "/auth";
+  List<Module> get imports => [CoreModule()];
 
   @override
-  Map<String, WidgetBuilder> get pages => {
-        "/login": (context) => LoginPage(
-              controller: Injector.get<LoginController>(),
-            ),
-        "/register": (context) => RegisterPage(
-              controller: Injector.get<RegisterController>(),
-            ),
-      };
+  void binds(Injector i) {
+    i.addLazySingleton<AuthGateway>(AuthGatewayImpl.new);
+    i.add(LoginController.new);
+  }
+
+  @override
+  void exportedBinds(Injector i) {}
+
+  @override
+  void routes(RouteManager r) {
+    r.child("/register",
+        child: (_) =>
+            RegisterPage(controller: Modular.get<RegisterController>()));
+    r.child("/login",
+        child: (_) => LoginPage(controller: Modular.get<LoginController>()));
+  }
 }

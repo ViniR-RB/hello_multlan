@@ -1,13 +1,13 @@
-import 'package:asyncstate/asyncstate.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:hellomultlan/app/core/either/either.dart';
 import 'package:hellomultlan/app/core/exceptions/gateway_exception.dart';
+import 'package:hellomultlan/app/core/helpers/loader.dart';
 import 'package:hellomultlan/app/core/helpers/messages.dart';
 import 'package:hellomultlan/app/core/models/box_model.dart';
 import 'package:hellomultlan/app/modules/box/gateway/box_gateway.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 
-class BoxMapController with MessageStateMixin {
+class BoxMapController with MessageStateMixin, LoaderControllerMixin {
   final BoxGateway _gateway;
 
   BoxMapController({required BoxGateway gateway}) : _gateway = gateway;
@@ -19,7 +19,8 @@ class BoxMapController with MessageStateMixin {
   List<BoxModel> get boxList => _boxList();
 
   Future<void> getAllBoxs() async {
-    final result = await _gateway.getAllBoxs().asyncLoader();
+    loader(true);
+    final result = await _gateway.getAllBoxs();
 
     switch (result) {
       case Failure(exception: GatewayException(message: final message)):
@@ -27,6 +28,7 @@ class BoxMapController with MessageStateMixin {
       case Sucess(value: final value):
         _boxList.forceUpdate(value);
     }
+    loader(false);
   }
 
   Future<void> editBox(BoxModel model) async {}

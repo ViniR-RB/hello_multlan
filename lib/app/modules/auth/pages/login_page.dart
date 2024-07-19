@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:hellomultlan/app/core/helpers/loader.dart';
 import 'package:hellomultlan/app/core/helpers/messages.dart';
 import 'package:hellomultlan/app/modules/auth/controller/login_controller.dart';
 import 'package:signals_flutter/signals_flutter.dart';
@@ -12,7 +14,8 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> with MessageViewMixin {
+class _LoginPageState extends State<LoginPage>
+    with MessageViewMixin, LoaderViewMixin {
   final _emailEC = TextEditingController();
   final _passwordEC = TextEditingController();
   final formKey = GlobalKey<FormState>();
@@ -21,11 +24,13 @@ class _LoginPageState extends State<LoginPage> with MessageViewMixin {
   void initState() {
     super.initState();
     messageListener(widget.controller);
+    loaderListerner(widget.controller);
     effect(() => {
           if (widget.controller.isLogged)
             {
-              Navigator.pushNamedAndRemoveUntil(
-                  context, "/box", (route) => false)
+              Modular.to.navigate(
+                "/box",
+              )
             }
         });
   }

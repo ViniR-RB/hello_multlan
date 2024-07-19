@@ -83,11 +83,15 @@ class BoxDetail extends StatelessWidget {
                     const SizedBox(
                       width: 12,
                     ),
-                    Text(boxModel.listUsers.toString(),
-                        style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w500)),
-                    const SizedBox(
-                      width: 16,
+                    Expanded(
+                      child: Text(boxModel.listUsers.toString(),
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: true,
+                          maxLines: 2,
+                          style: const TextStyle(
+                              overflow: TextOverflow.ellipsis,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500)),
                     ),
                   ],
                 ),

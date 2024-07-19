@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hellomultlan/app/core/helpers/loader.dart';
 import 'package:hellomultlan/app/core/helpers/messages.dart';
 import 'package:hellomultlan/app/core/theme/app_theme.dart';
 import 'package:hellomultlan/app/modules/box/controllers/box_form_controller.dart';
@@ -6,15 +7,16 @@ import 'package:hellomultlan/app/modules/box/widgets/custom_text_field.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 import 'package:validatorless/validatorless.dart';
 
-class BoxForm extends StatefulWidget {
+class BoxFormPage extends StatefulWidget {
   final BoxFormController controller;
-  const BoxForm({super.key, required this.controller});
+  const BoxFormPage({super.key, required this.controller});
 
   @override
-  State<BoxForm> createState() => _BoxFormState();
+  State<BoxFormPage> createState() => _BoxFormPageState();
 }
 
-class _BoxFormState extends State<BoxForm> with MessageViewMixin {
+class _BoxFormPageState extends State<BoxFormPage>
+    with MessageViewMixin, LoaderViewMixin {
   List<Widget> icons = <Widget>[
     const Icon(Icons.location_on),
     const Icon(Icons.location_off),
@@ -28,6 +30,7 @@ class _BoxFormState extends State<BoxForm> with MessageViewMixin {
   void initState() {
     super.initState();
     messageListener(widget.controller);
+    loaderListerner(widget.controller);
   }
 
   @override

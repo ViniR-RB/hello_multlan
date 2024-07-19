@@ -1,7 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:asyncstate/asyncstate.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -9,13 +8,14 @@ import 'package:hellomultlan/app/core/either/either.dart';
 import 'package:hellomultlan/app/core/exceptions/gateway_exception.dart';
 import 'package:hellomultlan/app/core/exceptions/geolocator_service_exception.dart';
 import 'package:hellomultlan/app/core/exceptions/image_picker_service_exception.dart';
+import 'package:hellomultlan/app/core/helpers/loader.dart';
 import 'package:hellomultlan/app/core/helpers/messages.dart';
 import 'package:hellomultlan/app/core/services/geolocator_service.dart';
 import 'package:hellomultlan/app/core/services/image_picker_service.dart';
 import 'package:hellomultlan/app/modules/box/gateway/box_gateway.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 
-class BoxFormController with MessageStateMixin {
+class BoxFormController with MessageStateMixin, LoaderControllerMixin {
   final BoxGateway _gateway;
   final ImagePickerService _imagePickerService;
   final GeolocatorService _geolocatorService;
@@ -72,7 +72,8 @@ class BoxFormController with MessageStateMixin {
           listClient.value.length, (index) => listClient.value[index].text),
       file: fileImage
     );
-    final result = await _gateway.saveBox(boxSaved).asyncLoader();
+    loader(true);
+    final result = await _gateway.saveBox(boxSaved);
 
     switch (result) {
       case Failure(exception: GatewayException(message: final message)):
@@ -80,6 +81,7 @@ class BoxFormController with MessageStateMixin {
       case Sucess():
         showSuccess("Caixa Criada com Sucesso");
     }
+    loader(false);
   }
 
   Future<void> getLocation() async {

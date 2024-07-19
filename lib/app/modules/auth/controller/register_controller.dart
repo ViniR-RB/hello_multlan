@@ -1,4 +1,3 @@
-import 'package:asyncstate/asyncstate.dart';
 import 'package:hellomultlan/app/core/either/either.dart';
 import 'package:hellomultlan/app/core/exceptions/gateway_exception.dart';
 import 'package:hellomultlan/app/core/helpers/messages.dart';
@@ -17,14 +16,17 @@ class RegisterController with MessageStateMixin {
   void toogleVisiblePassword() {
     _isObscurePassword.forceUpdate(!_isObscurePassword.value);
   }
- 
+
   final _isSuccessRegister = ValueSignal<bool>(false);
   bool get isSuccessRegister => _isSuccessRegister();
 
-  Future<void> register(String email, String name, String password) async {
-    final result =
-        await _authGateway.register(email, name, password).asyncLoader();
+  final _isLoading = ValueSignal<bool>(false);
+  void _setIsLoading() => _isLoading.set(!_isLoading.value, force: true);
 
+  Future<void> register(String email, String name, String password) async {
+    _setIsLoading();
+    final result = await _authGateway.register(email, name, password);
+    _setIsLoading();
     switch (result) {
       case Sucess():
         showSuccess("Sucesso ao Cadastrar Usuário");

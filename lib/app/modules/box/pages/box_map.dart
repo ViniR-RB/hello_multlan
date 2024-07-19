@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:hellomultlan/app/modules/box/controllers/box_map_controller.dart';
 import 'package:hellomultlan/app/modules/box/pages/box_detail.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 
-class BoxMap extends StatefulWidget {
+class BoxMapPage extends StatefulWidget {
   final BoxMapController controller;
-  const BoxMap({super.key, required this.controller});
+  const BoxMapPage({super.key, required this.controller});
 
   @override
-  State<BoxMap> createState() => _BoxMapState();
+  State<BoxMapPage> createState() => _BoxMapPageState();
 }
 
-class _BoxMapState extends State<BoxMap> {
+class _BoxMapPageState extends State<BoxMapPage> {
   @override
   void initState() {
     super.initState();
