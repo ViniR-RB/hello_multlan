@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:hellomultlan/app/core/models/box_model.dart';
 import 'package:hellomultlan/app/modules/box/controllers/box_map_controller.dart';
 
@@ -15,7 +16,8 @@ class BoxDetail extends StatelessWidget {
         appBar: AppBar(
           actions: [
             IconButton(
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () =>
+                  Modular.to.pushNamed("/box/edit", arguments: boxModel),
               icon: const Icon(Icons.mode_edit),
             ),
           ],

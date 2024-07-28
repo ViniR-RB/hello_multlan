@@ -73,7 +73,7 @@ class BoxFormController with MessageStateMixin, LoaderControllerMixin {
       file: fileImage
     );
     loader(true);
-    final result = await _gateway.saveBox(boxSaved);
+    final result = await _gateway.createBox(boxSaved);
 
     switch (result) {
       case Failure(exception: GatewayException(message: final message)):
