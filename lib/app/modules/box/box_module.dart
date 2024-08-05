@@ -5,6 +5,7 @@ import 'package:hellomultlan/app/modules/box/controllers/box_form_controller.dar
 import 'package:hellomultlan/app/modules/box/controllers/box_map_controller.dart';
 import 'package:hellomultlan/app/modules/box/gateway/box_gateway.dart';
 import 'package:hellomultlan/app/modules/box/gateway/box_gateway_impl.dart';
+import 'package:hellomultlan/app/modules/box/pages/box_detail.dart';
 import 'package:hellomultlan/app/modules/box/pages/box_edit.dart';
 import 'package:hellomultlan/app/modules/box/pages/box_form.dart';
 import 'package:hellomultlan/app/modules/box/pages/box_hub.dart';
@@ -33,10 +34,10 @@ class BoxModule extends Module {
     r.child(Modular.initialRoute, child: (_) => const BoxHub());
     r.child("/map", child: (_) => BoxMapPage(controller: Modular.get()));
     r.child("/form", child: (_) => BoxFormPage(controller: Modular.get()));
+    r.child("/detail", child: (_) => BoxDetail(controller: Modular.get()));
     r.child(
       "/edit",
-      child: (_) =>
-          BoxEdit(boxModel: Modular.args.data, controller: Modular.get()),
+      child: (_) => BoxEdit(controller: Modular.args.data),
     );
   }
 }

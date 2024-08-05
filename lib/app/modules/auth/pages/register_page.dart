@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:hellomultlan/app/core/helpers/messages.dart';
 import 'package:hellomultlan/app/core/widgets/debounce_button.dart';
 import 'package:hellomultlan/app/modules/auth/controller/register_controller.dart';
@@ -25,9 +26,7 @@ class _RegisterPageState extends State<RegisterPage> with MessageViewMixin {
     effect(() => {
           if (widget.controller.isSuccessRegister == true)
             {
-              Navigator.of(context).canPop()
-                  ? Navigator.of(context).pop()
-                  : null,
+              Modular.to.canPop() ? Modular.to.pop() : null,
             }
         });
   }

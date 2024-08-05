@@ -25,10 +25,11 @@ class BoxMapController with MessageStateMixin, LoaderControllerMixin {
     switch (result) {
       case Failure(exception: GatewayException(message: final message)):
         showError(message);
+        loader(false);
       case Sucess(value: final value):
-        _boxList.forceUpdate(value);
+        _boxList.set(value, force: true);
+        loader(false);
     }
-    loader(false);
   }
 
   Future<void> editBox(BoxModel model) async {}

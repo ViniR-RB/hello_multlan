@@ -3,4 +3,5 @@ typedef UpdatedBoxDto = ({
   int filledSpace,
   int freeSpace,
   List<String> listClient,
+  String note,
 });

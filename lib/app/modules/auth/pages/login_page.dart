@@ -29,7 +29,7 @@ class _LoginPageState extends State<LoginPage>
           if (widget.controller.isLogged)
             {
               Modular.to.navigate(
-                "/box",
+                "/box/",
               )
             }
         });

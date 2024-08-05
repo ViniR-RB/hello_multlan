@@ -8,5 +8,5 @@ import 'package:hellomultlan/app/modules/box/dto/updated_box_dto.dart';
 abstract interface class BoxGateway {
   Future<Either<Unit, GatewayException>> createBox(CreateBoxDto boxSaved);
   Future<Either<List<BoxModel>, GatewayException>> getAllBoxs();
-  Future<Either<Unit, GatewayException>> saveBox(UpdatedBoxDto updatedBox);
+  Future<Either<BoxModel, GatewayException>> saveBox(UpdatedBoxDto updatedBox);
 }

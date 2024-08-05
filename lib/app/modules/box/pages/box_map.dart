@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:hellomultlan/app/core/helpers/loader.dart';
+import 'package:hellomultlan/app/core/helpers/messages.dart';
 import 'package:hellomultlan/app/modules/box/controllers/box_map_controller.dart';
-import 'package:hellomultlan/app/modules/box/pages/box_detail.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 
@@ -13,13 +15,22 @@ class BoxMapPage extends StatefulWidget {
   State<BoxMapPage> createState() => _BoxMapPageState();
 }
 
-class _BoxMapPageState extends State<BoxMapPage> {
+class _BoxMapPageState extends State<BoxMapPage>
+    with
+        MessageViewMixin,
+        LoaderViewMixin,
+        AutomaticKeepAliveClientMixin<BoxMapPage> {
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       widget.controller.getAllBoxs();
     });
+    messageListener(widget.controller);
+    loaderListerner(widget.controller);
   }
 
   @override
@@ -29,12 +40,18 @@ class _BoxMapPageState extends State<BoxMapPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-          onPressed: () => Navigator.of(context).pushNamed("/box/form"),
+          onPressed: () => Modular.to.pushNamed("/box/form"),
           child: const Icon(Icons.add)),
       appBar: AppBar(
-        title: const Text("Box Map"),
+        title: const Text("Mapa de Ctos"),
+        actions: [
+          IconButton(
+              onPressed: () async => await widget.controller.getAllBoxs(),
+              icon: const Icon(Icons.refresh))
+        ],
       ),
       body: Stack(
         children: [
@@ -58,25 +75,20 @@ class _BoxMapPageState extends State<BoxMapPage> {
                   markers: widget.controller.boxList
                       .map(
                         (boxElement) => Marker(
-                            width: 50,
-                            height: 50,
-                            point: LatLng(double.parse(boxElement.latitude),
-                                double.parse(boxElement.longitude)),
-                            child: Material(
-                              color: Colors.transparent,
-                              child: InkWell(
-                                borderRadius: BorderRadius.circular(50),
-                                onTap: () => Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => BoxDetail(
-                                      boxModel: boxElement,
-                                      controller: widget.controller,
-                                    ),
-                                  ),
-                                ),
-                                child: const Icon(Icons.room),
-                              ),
-                            )),
+                          width: 50,
+                          height: 50,
+                          point: LatLng(double.parse(boxElement.latitude),
+                              double.parse(boxElement.longitude)),
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(50),
+                              onTap: () => Modular.to.pushNamed("/box/detail",
+                                  arguments: boxElement),
+                              child: const Icon(Icons.room),
+                            ),
+                          ),
+                        ),
                       )
                       .toList(),
                 ),

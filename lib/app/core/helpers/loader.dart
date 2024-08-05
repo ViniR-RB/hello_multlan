@@ -3,16 +3,31 @@ import 'package:hellomultlan/app/core/widgets/custom_loader.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 
 final class Loader {
-  static final OverlayEntry _overlayEntry = OverlayEntry(
-    builder: (context) => const CustomLoader(),
-  );
+  // ignore: avoid_init_to_null
+  static OverlayEntry? _overlayEntry = null;
+
+  // ignore: prefer_final_fields
+  static bool _isShowing = false;
+
   static void showLoader(bool? showOrRemoveLoader, BuildContext context) {
     final overlay = Overlay.of(context);
+
     switch (showOrRemoveLoader) {
       case true:
-        overlay.insert(_overlayEntry);
+        if (!_isShowing) {
+          _overlayEntry = OverlayEntry(
+            builder: (_) => const CustomLoader(),
+            maintainState: false,
+          );
+          overlay.insert(_overlayEntry!);
+          _isShowing = true;
+        }
+
       case false:
-        _overlayEntry.remove();
+        if (_isShowing) {
+          _overlayEntry?.remove();
+          _isShowing = false;
+        }
       case null:
         null;
     }
@@ -23,8 +38,11 @@ mixin LoaderControllerMixin {
   final Signal<bool?> _showLoader = signal(null);
   bool? get showLoader => _showLoader();
 
+  _clearLoader() => _showLoader.set(null);
+
   void loader(bool showLoader) {
-    _showLoader.value = showLoader;
+    _clearLoader();
+    _showLoader.set(showLoader);
   }
 }
 
@@ -33,7 +51,7 @@ mixin LoaderViewMixin<T extends StatefulWidget> on State<T> {
     effect(() => {
           switch (state) {
             LoaderControllerMixin(:final showLoader?) =>
-              Loader.showLoader(showLoader, context),
+              mounted ? Loader.showLoader(showLoader, context) : null,
             _ => null,
           }
         });

@@ -6,11 +6,12 @@ class BoxModel {
   final String id;
   final String latitude;
   final String longitude;
-  final List<String> listUsers;
-  final int freeSpace;
-  final int filledSpace;
+  List<String> listUsers;
+  String? note;
+  int freeSpace;
+  int filledSpace;
   final String createdAt;
-  final String updatedAt;
+  String updatedAt;
   final String image;
 
   BoxModel({
@@ -18,6 +19,7 @@ class BoxModel {
     required this.latitude,
     required this.longitude,
     required this.listUsers,
+    this.note = "",
     required this.freeSpace,
     required this.filledSpace,
     required this.createdAt,
@@ -30,6 +32,7 @@ class BoxModel {
     String? latitude,
     String? longitude,
     List<String>? listUsers,
+    String? note,
     int? freeSpace,
     int? filledSpace,
     String? createdAt,
@@ -41,6 +44,7 @@ class BoxModel {
       latitude: latitude ?? this.latitude,
       longitude: longitude ?? this.longitude,
       listUsers: listUsers ?? this.listUsers,
+      note: note ?? this.note,
       freeSpace: freeSpace ?? this.freeSpace,
       filledSpace: filledSpace ?? this.filledSpace,
       createdAt: createdAt ?? this.createdAt,
@@ -55,12 +59,23 @@ class BoxModel {
       'latitude': latitude,
       'longitude': longitude,
       'listUsers': listUsers,
+      "note": note,
       'freeSpace': freeSpace,
       'filledSpace': filledSpace,
       'createdAt': createdAt,
       'updatedAt': updatedAt,
       'image': image,
     };
+  }
+
+  BoxModel updatedBox(int filledSpace, int freeSpace, List<String> listUser,
+      String note, String updatedAt) {
+    this.filledSpace = filledSpace;
+    this.freeSpace = freeSpace;
+    listUsers = listUser;
+    this.note = note;
+    this.updatedAt;
+    return this;
   }
 
   factory BoxModel.fromMap(Map map) {
@@ -72,6 +87,7 @@ class BoxModel {
         "freeSpace": final int freeSpace,
         "filledSpace": final int filledSpace,
         "listUser": final List listUser,
+        "note": final String note,
         "createdAt": final String createdAt,
         "updatedAt": final String updatedAt,
         "image": final String image,
@@ -81,6 +97,7 @@ class BoxModel {
             latitude: latitude,
             longitude: longitude,
             listUsers: listUser.map((e) => e.toString()).toList(),
+            note: note,
             freeSpace: freeSpace,
             filledSpace: filledSpace,
             createdAt: createdAt,
@@ -97,7 +114,7 @@ class BoxModel {
 
   @override
   String toString() {
-    return 'BoxModel(id: $id, latitude: $latitude, longitude: $longitude, listUsers: $listUsers, freeSpace: $freeSpace, filledSpace: $filledSpace, createdAt: $createdAt, updatedAt: $updatedAt, image: $image)';
+    return 'BoxModel(id: $id, latitude: $latitude, longitude: $longitude, listUsers: $listUsers,"note": $note, freeSpace: $freeSpace, filledSpace: $filledSpace, createdAt: $createdAt, updatedAt: $updatedAt, image: $image)';
   }
 
   @override
@@ -108,6 +125,7 @@ class BoxModel {
         other.latitude == latitude &&
         other.longitude == longitude &&
         listEquals(other.listUsers, listUsers) &&
+        other.note == note &&
         other.freeSpace == freeSpace &&
         other.filledSpace == filledSpace &&
         other.createdAt == createdAt &&
@@ -121,6 +139,7 @@ class BoxModel {
         latitude.hashCode ^
         longitude.hashCode ^
         listUsers.hashCode ^
+        note.hashCode ^
         freeSpace.hashCode ^
         filledSpace.hashCode ^
         createdAt.hashCode ^

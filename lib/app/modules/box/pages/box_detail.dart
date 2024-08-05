@@ -1,28 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:hellomultlan/app/core/models/box_model.dart';
-import 'package:hellomultlan/app/modules/box/controllers/box_map_controller.dart';
+import 'package:hellomultlan/app/modules/box/controllers/box_edit_controller.dart';
+import 'package:signals_flutter/signals_flutter.dart';
 
 class BoxDetail extends StatelessWidget {
-  final BoxModel boxModel;
-  final BoxMapController controller;
-  const BoxDetail(
-      {super.key, required this.boxModel, required this.controller});
+  final BoxEditController controller;
+  const BoxDetail({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
     final Size(:width, :height) = MediaQuery.of(context).size;
     return Scaffold(
-        appBar: AppBar(
-          actions: [
-            IconButton(
-              onPressed: () =>
-                  Modular.to.pushNamed("/box/edit", arguments: boxModel),
-              icon: const Icon(Icons.mode_edit),
-            ),
-          ],
-        ),
-        body: Padding(
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            onPressed: () =>
+                Modular.to.pushNamed("/box/edit", arguments: controller),
+            icon: const Icon(Icons.mode_edit),
+          ),
+        ],
+      ),
+      body: Watch.builder(
+        builder: (_) => Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: SingleChildScrollView(
             child: Column(
@@ -35,7 +34,7 @@ class BoxDetail extends StatelessWidget {
                   child: InteractiveViewer(
                     maxScale: 5,
                     child: Image.network(
-                      boxModel.image,
+                      controller.boxModel.image,
                       fit: BoxFit.scaleDown,
                     ),
                   ),
@@ -49,7 +48,7 @@ class BoxDetail extends StatelessWidget {
                     const SizedBox(
                       width: 12,
                     ),
-                    Text(boxModel.id),
+                    Text(controller.boxModel.id),
                   ],
                 ),
                 Row(
@@ -61,7 +60,7 @@ class BoxDetail extends StatelessWidget {
                     const SizedBox(
                       width: 12,
                     ),
-                    Text("Espaço total: ${boxModel.freeSpace}",
+                    Text("Espaço total: ${controller.boxModel.freeSpace}",
                         style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w500)),
                   ],
@@ -73,7 +72,7 @@ class BoxDetail extends StatelessWidget {
                       width: 12,
                     ),
                     Text(
-                      "Clientes Ativos: ${boxModel.filledSpace}",
+                      "Clientes Ativos: ${controller.boxModel.filledSpace}",
                       style: const TextStyle(
                           fontSize: 16, fontWeight: FontWeight.w500),
                     ),
@@ -86,7 +85,7 @@ class BoxDetail extends StatelessWidget {
                       width: 12,
                     ),
                     Expanded(
-                      child: Text(boxModel.listUsers.toString(),
+                      child: Text(controller.boxModel.listUsers.toString(),
                           overflow: TextOverflow.ellipsis,
                           softWrap: true,
                           maxLines: 2,
@@ -97,9 +96,22 @@ class BoxDetail extends StatelessWidget {
                     ),
                   ],
                 ),
+                Row(
+                  children: [
+                    const Icon(Icons.update),
+                    const SizedBox(
+                      width: 12,
+                    ),
+                    Text(controller.boxModel.note ?? "",
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w500))
+                  ],
+                )
               ],
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

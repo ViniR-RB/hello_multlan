@@ -61,19 +61,18 @@ class BoxGatewayImpl implements BoxGateway {
   }
 
   @override
-  Future<Either<Unit, GatewayException>> saveBox(
+  Future<Either<BoxModel, GatewayException>> saveBox(
       UpdatedBoxDto updatedBox) async {
     try {
       final UpdatedBoxDto(:id, :filledSpace, :freeSpace, :listClient) =
           updatedBox;
-      print(listClient);
-
-      await _restClient.auth.put("/api/box/$id", data: {
+      final Response(:data) = await _restClient.auth.put("/api/box/$id", data: {
         "filledSpace": filledSpace,
         "freeSpace": freeSpace,
         "listUser": listClient
       });
-      return Sucess(unit);
+      final boxModel = BoxModel.fromMap(data);
+      return Sucess(boxModel);
     } on DioException catch (e, s) {
       const message = "Erro ao atualiza a caixas";
       log(message, error: e, stackTrace: s);

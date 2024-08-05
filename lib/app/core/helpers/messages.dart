@@ -59,15 +59,19 @@ mixin MessageStateMixin {
 
 mixin MessageViewMixin<T extends StatefulWidget> on State<T> {
   void messageListener(MessageStateMixin state) {
-    effect(() {
-      switch (state) {
-        case MessageStateMixin(:final errorMessage?):
-          Messages.showError(errorMessage, context);
-        case MessageStateMixin(:final infoMessage?):
-          Messages.showInfo(infoMessage, context);
-        case MessageStateMixin(:final successMessage?):
-          Messages.showSuccess(successMessage, context);
-      }
-    });
+    if (mounted) {
+      effect(
+        () {
+          switch (state) {
+            case MessageStateMixin(:final errorMessage?):
+              Messages.showError(errorMessage, context);
+            case MessageStateMixin(:final infoMessage?):
+              Messages.showInfo(infoMessage, context);
+            case MessageStateMixin(:final successMessage?):
+              Messages.showSuccess(successMessage, context);
+          }
+        },
+      );
+    }
   }
 }

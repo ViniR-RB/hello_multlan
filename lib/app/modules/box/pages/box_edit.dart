@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hellomultlan/app/core/helpers/loader.dart';
 import 'package:hellomultlan/app/core/helpers/messages.dart';
-import 'package:hellomultlan/app/core/models/box_model.dart';
 import 'package:hellomultlan/app/core/theme/app_theme.dart';
 import 'package:hellomultlan/app/modules/box/controllers/box_edit_controller.dart';
 import 'package:hellomultlan/app/modules/box/widgets/custom_text_field.dart';
@@ -9,9 +8,8 @@ import 'package:signals_flutter/signals_flutter.dart';
 import 'package:validatorless/validatorless.dart';
 
 class BoxEdit extends StatefulWidget {
-  final BoxModel boxModel;
   final BoxEditController controller;
-  const BoxEdit({super.key, required this.boxModel, required this.controller});
+  const BoxEdit({super.key, required this.controller});
 
   @override
   State<BoxEdit> createState() => _BoxEditState();
@@ -26,7 +24,15 @@ class _BoxEditState extends State<BoxEdit>
     _controller = widget.controller;
     messageListener(widget.controller);
     loaderListerner(widget.controller);
+
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    messageListener(widget.controller);
+    loaderListerner(widget.controller);
+    super.didChangeDependencies();
   }
 
   @override
