@@ -3,9 +3,22 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:hellomultlan/app/modules/box/controllers/box_edit_controller.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 
-class BoxDetail extends StatelessWidget {
+class BoxDetail extends StatefulWidget {
   final BoxEditController controller;
   const BoxDetail({super.key, required this.controller});
+
+  @override
+  State<BoxDetail> createState() => _BoxDetailState();
+}
+
+class _BoxDetailState extends State<BoxDetail> {
+  @override
+  void didUpdateWidget(covariant BoxDetail oldWidget) {
+    if (oldWidget.controller.boxModel == widget.controller.boxModel) {
+      setState(() {});
+    }
+    super.didUpdateWidget(oldWidget);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +28,7 @@ class BoxDetail extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () =>
-                Modular.to.pushNamed("/box/edit", arguments: controller),
+                Modular.to.pushNamed("/box/edit", arguments: widget.controller),
             icon: const Icon(Icons.mode_edit),
           ),
         ],
@@ -34,7 +47,7 @@ class BoxDetail extends StatelessWidget {
                   child: InteractiveViewer(
                     maxScale: 5,
                     child: Image.network(
-                      controller.boxModel.image,
+                      widget.controller.boxModel.image,
                       fit: BoxFit.scaleDown,
                     ),
                   ),
@@ -48,7 +61,7 @@ class BoxDetail extends StatelessWidget {
                     const SizedBox(
                       width: 12,
                     ),
-                    Text(controller.boxModel.id),
+                    Text(widget.controller.boxModel.label),
                   ],
                 ),
                 Row(
@@ -60,7 +73,8 @@ class BoxDetail extends StatelessWidget {
                     const SizedBox(
                       width: 12,
                     ),
-                    Text("Espaço total: ${controller.boxModel.freeSpace}",
+                    Text(
+                        "Espaço total: ${widget.controller.boxModel.freeSpace}",
                         style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w500)),
                   ],
@@ -72,7 +86,7 @@ class BoxDetail extends StatelessWidget {
                       width: 12,
                     ),
                     Text(
-                      "Clientes Ativos: ${controller.boxModel.filledSpace}",
+                      "Clientes Ativos: ${widget.controller.boxModel.filledSpace}",
                       style: const TextStyle(
                           fontSize: 16, fontWeight: FontWeight.w500),
                     ),
@@ -85,7 +99,8 @@ class BoxDetail extends StatelessWidget {
                       width: 12,
                     ),
                     Expanded(
-                      child: Text(controller.boxModel.listUsers.toString(),
+                      child: Text(
+                          widget.controller.boxModel.listUsers.toString(),
                           overflow: TextOverflow.ellipsis,
                           softWrap: true,
                           maxLines: 2,
@@ -96,17 +111,32 @@ class BoxDetail extends StatelessWidget {
                     ),
                   ],
                 ),
+                Visibility(
+                  visible: widget.controller.boxModel.note?.isNotEmpty ?? false,
+                  child: Row(
+                    children: [
+                      const Icon(Icons.update),
+                      const SizedBox(
+                        width: 12,
+                      ),
+                      Text(widget.controller.boxModel.note ?? "",
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w500))
+                    ],
+                  ),
+                ),
                 Row(
                   children: [
-                    const Icon(Icons.update),
+                    const Icon(Icons.signal_wifi_4_bar),
                     const SizedBox(
                       width: 12,
                     ),
-                    Text(controller.boxModel.note ?? "",
+                    Text(
+                        "Sinal: ${widget.controller.boxModel.signal.toString()}",
                         style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w500))
                   ],
-                )
+                ),
               ],
             ),
           ),

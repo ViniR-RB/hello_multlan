@@ -35,9 +35,8 @@ class BoxModule extends Module {
     r.child("/map", child: (_) => BoxMapPage(controller: Modular.get()));
     r.child("/form", child: (_) => BoxFormPage(controller: Modular.get()));
     r.child("/detail", child: (_) => BoxDetail(controller: Modular.get()));
-    r.child(
-      "/edit",
-      child: (_) => BoxEdit(controller: Modular.args.data),
-    );
+    r.child("/edit",
+        child: (_) => BoxEdit(controller: Modular.args.data),
+        maintainState: false);
   }
 }

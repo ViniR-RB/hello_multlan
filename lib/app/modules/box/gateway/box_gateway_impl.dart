@@ -20,19 +20,23 @@ class BoxGatewayImpl implements BoxGateway {
       CreateBoxDto boxSaved) async {
     try {
       final CreateBoxDto(
+        :label,
         :filledSpace,
         :freeSpace,
         :latitude,
         :longitude,
+        :signal,
         :file,
         :listUser
       ) = boxSaved;
       final formData = FormData.fromMap({
+        "label": label,
         "filledSpace": filledSpace,
         "freeSpace": freeSpace,
         "latitude": latitude,
         "longitude": longitude,
         "listUser": listUser,
+        "signal": signal,
         "file": await MultipartFile.fromFile(file.path,
             filename: file.uri.toString()),
       });
@@ -64,11 +68,19 @@ class BoxGatewayImpl implements BoxGateway {
   Future<Either<BoxModel, GatewayException>> saveBox(
       UpdatedBoxDto updatedBox) async {
     try {
-      final UpdatedBoxDto(:id, :filledSpace, :freeSpace, :listClient) =
-          updatedBox;
+      final UpdatedBoxDto(
+        :id,
+        :filledSpace,
+        :freeSpace,
+        :listClient,
+        :signal,
+        :label
+      ) = updatedBox;
       final Response(:data) = await _restClient.auth.put("/api/box/$id", data: {
+        "label": label,
         "filledSpace": filledSpace,
         "freeSpace": freeSpace,
+        "signal": signal,
         "listUser": listClient
       });
       final boxModel = BoxModel.fromMap(data);

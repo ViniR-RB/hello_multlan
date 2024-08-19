@@ -45,8 +45,10 @@ class BoxFormController with MessageStateMixin, LoaderControllerMixin {
   }
 
   Future<void> sendBox(
+    String label,
     int filledSpace,
     int freeSpace,
+    num signal,
     String address,
   ) async {
     if (fileImage.path.isEmpty) {
@@ -63,16 +65,19 @@ class BoxFormController with MessageStateMixin, LoaderControllerMixin {
     } else {
       await getLocationByAddres(address);
     }
+    loader(true);
     final boxSaved = (
+      label: label,
       filledSpace: filledSpace,
       freeSpace: freeSpace,
       latitude: _latitude,
       longitude: _longitude,
+      signal: signal,
       listUser: List.generate(
           listClient.value.length, (index) => listClient.value[index].text),
       file: fileImage
     );
-    loader(true);
+
     final result = await _gateway.createBox(boxSaved);
 
     switch (result) {

@@ -23,6 +23,12 @@ class BoxEditController with MessageStateMixin, LoaderControllerMixin {
   late final TextEditingController _note;
   TextEditingController get note => _note;
 
+  late final TextEditingController _signal;
+  TextEditingController get signal => _signal;
+
+  late final TextEditingController _label;
+  TextEditingController get label => _label;
+
   TextEditingController get totalClientsActivatedEC => _totalClientsActivatedEC;
 
   final ValueSignal<List<TextEditingController>> _listClient = ValueSignal([]);
@@ -44,6 +50,8 @@ class BoxEditController with MessageStateMixin, LoaderControllerMixin {
     _totalClientsActivatedEC =
         TextEditingController(text: boxModel.filledSpace.toString());
     _note = TextEditingController(text: "");
+    _signal = TextEditingController(text: boxModel.signal.toString());
+    _label = TextEditingController(text: boxModel.label);
     for (var element in boxModel.listUsers) {
       _listClient
           .set([..._listClient.value, TextEditingController(text: element)]);
@@ -64,17 +72,19 @@ class BoxEditController with MessageStateMixin, LoaderControllerMixin {
     if (valid) {
       loader(true);
       await _saveBox(
+          _label.text,
           int.parse(_totalClientsActivatedEC.text),
           int.parse(_totalClientsEC.text),
           List.generate(_listClient.value.length,
               (index) => _listClient.value[index].text),
+          num.parse(_signal.value.text),
           _note.text);
       loader(false);
     }
   }
 
-  Future<void> _saveBox(int filledSpace, int freeSpace, List<String> listUser,
-      String note) async {
+  Future<void> _saveBox(String label, int filledSpace, int freeSpace,
+      List<String> listUser, num signal, String note) async {
     if (filledSpace > listClient.length) {
       showError(
           "Quantidade de Nome de Clientes deve ser igual ao número de clientes ativos");
@@ -82,9 +92,11 @@ class BoxEditController with MessageStateMixin, LoaderControllerMixin {
     }
 
     final updatedBox = (
+      label: label,
       filledSpace: filledSpace,
       freeSpace: freeSpace,
       id: _boxModel.value!.id,
+      signal: _boxModel.value!.signal,
       listClient: listUser,
       note: note,
     );
@@ -93,13 +105,17 @@ class BoxEditController with MessageStateMixin, LoaderControllerMixin {
       case Sucess(:final value):
         final BoxModel(:updatedAt) = value;
         log("$value");
-        _boxModel.set(_boxModel.value!.updatedBox(
-          filledSpace,
-          freeSpace,
-          listUser,
-          note,
-          updatedAt,
-        ));
+        _boxModel.set(
+            _boxModel.value!.updatedBox(
+              label,
+              filledSpace,
+              freeSpace,
+              listUser,
+              signal,
+              note,
+              updatedAt,
+            ),
+            force: true);
 
         showSuccess("Sucesso em Salvar a Caixa");
       case Failure(exception: GatewayException(message: String message)):

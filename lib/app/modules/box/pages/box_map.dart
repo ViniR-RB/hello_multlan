@@ -28,9 +28,9 @@ class _BoxMapPageState extends State<BoxMapPage>
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       widget.controller.getAllBoxs();
+      messageListener(widget.controller);
+      loaderListerner(widget.controller);
     });
-    messageListener(widget.controller);
-    loaderListerner(widget.controller);
   }
 
   @override
@@ -50,7 +50,8 @@ class _BoxMapPageState extends State<BoxMapPage>
         actions: [
           IconButton(
               onPressed: () async => await widget.controller.getAllBoxs(),
-              icon: const Icon(Icons.refresh))
+              icon: const Icon(Icons.refresh)),
+          IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
         ],
       ),
       body: Stack(

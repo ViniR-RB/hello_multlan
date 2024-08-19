@@ -22,9 +22,11 @@ class _BoxFormPageState extends State<BoxFormPage>
     const Icon(Icons.location_off),
   ];
   final formKey = GlobalKey<FormState>();
+  final _labelEC = TextEditingController();
   final _totalClientsEC = TextEditingController(text: "0");
   final _totalClientsActivatedEC = TextEditingController(text: "0");
   final _addressEC = TextEditingController();
+  final _signalEC = TextEditingController(text: "0.0");
 
   @override
   void initState() {
@@ -51,8 +53,10 @@ class _BoxFormPageState extends State<BoxFormPage>
                     final valid = formKey.currentState?.validate() ?? false;
                     if (valid) {
                       widget.controller.sendBox(
+                          _labelEC.text,
                           int.parse(_totalClientsActivatedEC.text),
                           int.parse(_totalClientsEC.text),
+                          num.parse(_signalEC.text),
                           _addressEC.text);
                     }
                   },
@@ -124,23 +128,55 @@ class _BoxFormPageState extends State<BoxFormPage>
                     },
                   ),
                   CustomTextField(
-                      label: "Total de Clientes",
-                      keyboardType: TextInputType.number,
-                      controller: _totalClientsEC,
-                      validator: Validatorless.multiple([
+                    label: "Rótulo",
+                    keyboardType: TextInputType.name,
+                    controller: _labelEC,
+                    validator: Validatorless.multiple(
+                      [
                         Validatorless.required("Campo Requerido"),
-                      ])),
+                      ],
+                    ),
+                  ),
                   const SizedBox(
                     height: 24,
                   ),
                   CustomTextField(
-                      label: "Clientes Ativos",
+                    label: "Total de Clientes",
+                    keyboardType: TextInputType.number,
+                    controller: _totalClientsEC,
+                    validator: Validatorless.multiple(
+                      [
+                        Validatorless.required("Campo Requerido"),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  ValueListenableBuilder(
+                      valueListenable: _totalClientsEC,
+                      builder: (context, totalClientsEC, snapshot) {
+                        return CustomTextField(
+                            label: "Clientes Ativos",
+                            keyboardType: TextInputType.number,
+                            controller: _totalClientsActivatedEC,
+                            validator: Validatorless.multiple([
+                              Validatorless.required("Campo Requerido"),
+                              Validatorless.max(
+                                  int.tryParse(totalClientsEC.text) ?? 0,
+                                  "Clientes Ativos não pode ser maior que o espaço disponível")
+                            ]));
+                      }),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  CustomTextField(
+                      label: "Sinal",
                       keyboardType: TextInputType.number,
-                      controller: _totalClientsActivatedEC,
+                      controller: _signalEC,
                       validator: Validatorless.multiple([
                         Validatorless.required("Campo Requerido"),
-                        Validatorless.min(int.parse(_totalClientsEC.text),
-                            "Clientes Ativos não pode ser maior que o espaço disponível")
+                        Validatorless.number("Signal not a number")
                       ])),
                   const SizedBox(
                     height: 24,

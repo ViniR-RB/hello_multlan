@@ -22,17 +22,14 @@ class _BoxEditState extends State<BoxEdit>
   @override
   void initState() {
     _controller = widget.controller;
-    messageListener(widget.controller);
-    loaderListerner(widget.controller);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        messageListener(_controller);
+        loaderListerner(_controller);
+      }
+    });
 
     super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    messageListener(widget.controller);
-    loaderListerner(widget.controller);
-    super.didChangeDependencies();
   }
 
   @override
@@ -48,8 +45,8 @@ class _BoxEditState extends State<BoxEdit>
               snap: true,
               actions: [
                 TextButton(
-                    onPressed: () {
-                      _controller.validateForm();
+                    onPressed: () async {
+                      await _controller.validateForm();
                     },
                     child: const Text("Salvar Caixa"))
               ],
@@ -60,22 +57,41 @@ class _BoxEditState extends State<BoxEdit>
               sliver: SliverList(
                 delegate: SliverChildListDelegate([
                   CustomTextField(
-                      label: "Total de Clientes",
-                      keyboardType: TextInputType.number,
-                      controller: _controller.totalClientsEC,
-                      validator: Validatorless.required("Campo Requerido")),
+                    label: "Total de Clientes",
+                    keyboardType: TextInputType.number,
+                    controller: _controller.totalClientsEC,
+                    validator: Validatorless.multiple([
+                      Validatorless.required("Campo Requerido"),
+                      Validatorless.number("Clientes Ativos não é número"),
+                    ]),
+                  ),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  ValueListenableBuilder(
+                    valueListenable: _controller.totalClientsEC,
+                    builder: (_, totalClientsEC, __) => CustomTextField(
+                        label: "Clientes Ativos",
+                        keyboardType: TextInputType.number,
+                        controller: _controller.totalClientsActivatedEC,
+                        validator: Validatorless.multiple([
+                          Validatorless.required("Campo Requerido"),
+                          Validatorless.number("Clientes Ativos não é número"),
+                          Validatorless.max(
+                              int.tryParse(totalClientsEC.text) ?? 0,
+                              "Clientes Ativos não pode ser maior que o espaço disponível")
+                        ])),
+                  ),
                   const SizedBox(
                     height: 24,
                   ),
                   CustomTextField(
-                      label: "Clientes Ativos",
+                      label: "Sinal",
                       keyboardType: TextInputType.number,
-                      controller: _controller.totalClientsActivatedEC,
+                      controller: _controller.signal,
                       validator: Validatorless.multiple([
                         Validatorless.required("Campo Requerido"),
-                        Validatorless.max(
-                            int.parse(_controller.totalClientsEC.text),
-                            "Clientes Ativos não pode ser maior que o espaço disponível")
+                        Validatorless.number("Sinal não é número")
                       ])),
                   const SizedBox(
                     height: 24,

@@ -4,22 +4,26 @@ import 'package:flutter/foundation.dart';
 
 class BoxModel {
   final String id;
+  String label;
   final String latitude;
   final String longitude;
   List<String> listUsers;
   String? note;
   int freeSpace;
   int filledSpace;
+  num signal;
   final String createdAt;
   String updatedAt;
   final String image;
 
   BoxModel({
     required this.id,
+    required this.label,
     required this.latitude,
     required this.longitude,
     required this.listUsers,
     this.note = "",
+    required this.signal,
     required this.freeSpace,
     required this.filledSpace,
     required this.createdAt,
@@ -29,10 +33,12 @@ class BoxModel {
 
   BoxModel copyWith({
     String? id,
+    String? label,
     String? latitude,
     String? longitude,
     List<String>? listUsers,
     String? note,
+    num? signal,
     int? freeSpace,
     int? filledSpace,
     String? createdAt,
@@ -41,10 +47,12 @@ class BoxModel {
   }) {
     return BoxModel(
       id: id ?? this.id,
+      label: label ?? this.label,
       latitude: latitude ?? this.latitude,
       longitude: longitude ?? this.longitude,
       listUsers: listUsers ?? this.listUsers,
       note: note ?? this.note,
+      signal: signal ?? this.signal,
       freeSpace: freeSpace ?? this.freeSpace,
       filledSpace: filledSpace ?? this.filledSpace,
       createdAt: createdAt ?? this.createdAt,
@@ -56,10 +64,12 @@ class BoxModel {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
+      "label": label,
       'latitude': latitude,
       'longitude': longitude,
       'listUsers': listUsers,
       "note": note,
+      "signal": signal,
       'freeSpace': freeSpace,
       'filledSpace': filledSpace,
       'createdAt': createdAt,
@@ -68,13 +78,14 @@ class BoxModel {
     };
   }
 
-  BoxModel updatedBox(int filledSpace, int freeSpace, List<String> listUser,
-      String note, String updatedAt) {
+  BoxModel updatedBox(String label, int filledSpace, int freeSpace,
+      List<String> listUser, num signal, String note, String updatedAt) {
     this.filledSpace = filledSpace;
     this.freeSpace = freeSpace;
     listUsers = listUser;
     this.note = note;
-    this.updatedAt;
+    this.updatedAt = updatedAt;
+    this.signal = signal;
     return this;
   }
 
@@ -82,22 +93,26 @@ class BoxModel {
     return switch (map) {
       {
         "id": final String id,
+        "label": final String label,
         "latitude": final String latitude,
         "longitude": final String longitude,
         "freeSpace": final int freeSpace,
         "filledSpace": final int filledSpace,
         "listUser": final List listUser,
         "note": final String note,
+        "signal": final num signal,
         "createdAt": final String createdAt,
         "updatedAt": final String updatedAt,
         "image": final String image,
       } =>
         BoxModel(
             id: id,
+            label: label,
             latitude: latitude,
             longitude: longitude,
             listUsers: listUser.map((e) => e.toString()).toList(),
             note: note,
+            signal: signal.toDouble(),
             freeSpace: freeSpace,
             filledSpace: filledSpace,
             createdAt: createdAt,
