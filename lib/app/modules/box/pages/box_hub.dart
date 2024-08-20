@@ -23,7 +23,7 @@ class BoxHub extends StatelessWidget {
             CardItem(
               label: "Adicionar uma nova caixa",
               onTap: () => Modular.to.pushNamed("/box/form"),
-              iconSuffix: Icons.map,
+              iconSuffix: Icons.add_box,
               color: const Color(0xffE5FFE6),
             ),
           ],

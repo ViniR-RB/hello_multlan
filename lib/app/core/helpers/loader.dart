@@ -49,15 +49,13 @@ mixin LoaderControllerMixin {
 mixin LoaderViewMixin<T extends StatefulWidget> on State<T> {
   void loaderListerner(LoaderControllerMixin state) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        effect(() => {
-              switch (state) {
-                LoaderControllerMixin(:final showLoader?) =>
-                  mounted ? Loader.showLoader(showLoader, context) : null,
-                _ => null,
-              }
-            });
-      }
+      effect(() => {
+            switch (state) {
+              LoaderControllerMixin(:final showLoader?) =>
+                mounted ? Loader.showLoader(showLoader, context) : null,
+              _ => null,
+            }
+          });
     });
   }
 }

@@ -57,6 +57,17 @@ class _BoxEditState extends State<BoxEdit>
               sliver: SliverList(
                 delegate: SliverChildListDelegate([
                   CustomTextField(
+                    label: "Rótulo",
+                    keyboardType: TextInputType.number,
+                    controller: _controller.label,
+                    validator: Validatorless.multiple([
+                      Validatorless.required("Campo Requerido"),
+                    ]),
+                  ),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  CustomTextField(
                     label: "Total de Clientes",
                     keyboardType: TextInputType.number,
                     controller: _controller.totalClientsEC,
