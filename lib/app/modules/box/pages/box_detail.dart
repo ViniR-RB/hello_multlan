@@ -61,7 +61,9 @@ class _BoxDetailState extends State<BoxDetail> {
                     const SizedBox(
                       width: 12,
                     ),
-                    Text(widget.controller.boxModel.label),
+                    Text(widget.controller.boxModel.label,
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w500)),
                   ],
                 ),
                 Row(

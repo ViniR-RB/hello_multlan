@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:hellomultlan/app/core/helpers/loader.dart';
 import 'package:hellomultlan/app/core/helpers/messages.dart';
@@ -71,30 +72,51 @@ class _BoxMapPageState extends State<BoxMapPage>
                 maxZoom: 19,
                 userAgentPackageName: 'com.dev.vini',
               ),
-              Watch.builder(
-                builder: (_) => MarkerLayer(
-                  markers: widget.controller.boxList
-                      .map(
-                        (boxElement) => Marker(
-                          width: 50,
-                          height: 50,
-                          point: LatLng(double.parse(boxElement.latitude),
-                              double.parse(boxElement.longitude)),
-                          child: Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(50),
-                              onTap: () => Modular.to.pushNamed("/box/detail",
-                                  arguments: boxElement),
-                              child: const Icon(Icons.room),
+              Expanded(
+                child: Watch.builder(
+                  builder: (_) => MarkerLayer(
+                    markers: widget.controller.boxList
+                        .map(
+                          (boxElement) => Marker(
+                            height: 32,
+                            alignment: Alignment.center,
+                            point: LatLng(double.parse(boxElement.latitude),
+                                double.parse(boxElement.longitude)),
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(24),
+                                onTap: () => Modular.to.pushNamed("/box/detail",
+                                    arguments: boxElement),
+                                child: Wrap(
+                                  crossAxisAlignment: WrapCrossAlignment.end,
+                                  children: [
+                                    const Icon(
+                                      Icons.room_outlined,
+                                      color: Colors.teal,
+                                    ),
+                                    Text(
+                                      boxElement.label,
+                                      textAlign: TextAlign.start,
+                                      overflow: TextOverflow.fade,
+                                      maxLines: 1,
+                                      softWrap: true,
+                                      style: const TextStyle(
+                                          color: Colors.blue,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w800),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      )
-                      .toList(),
+                        )
+                        .toList(),
+                  ),
                 ),
               ),
-              /* CurrentLocationLayer() */
+              CurrentLocationLayer()
             ],
           ),
         ],
