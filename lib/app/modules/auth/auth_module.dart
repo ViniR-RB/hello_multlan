@@ -6,6 +6,7 @@ import 'package:hellomultlan/app/modules/auth/gateway/auth_gateway.dart';
 import 'package:hellomultlan/app/modules/auth/gateway/auth_gateway_impl.dart';
 import 'package:hellomultlan/app/modules/auth/pages/login_page.dart';
 import 'package:hellomultlan/app/modules/auth/pages/register_page.dart';
+import 'package:hellomultlan/app/modules/auth/store/auth_store.dart';
 
 class AuthModule extends Module {
   @override
@@ -18,7 +19,9 @@ class AuthModule extends Module {
   }
 
   @override
-  void exportedBinds(Injector i) {}
+  void exportedBinds(Injector i) {
+    i.addLazySingleton(AuthStore.new);
+  }
 
   @override
   void routes(RouteManager r) {

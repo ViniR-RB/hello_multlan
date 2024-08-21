@@ -2,9 +2,10 @@ import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:hellomultlan/app/core/configuration/configuration.dart';
 import 'package:hellomultlan/app/core/rest_client/interceptors/auth_interceptor.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RestClient extends DioForNative {
-  RestClient()
+  RestClient({required final Future<SharedPreferences> prefs})
       : super(
           BaseOptions(
             baseUrl: Configuration.baseUrl,
@@ -17,7 +18,7 @@ class RestClient extends DioForNative {
         requestBody: true,
         responseBody: true,
       ),
-      AuthInterceptor(),
+      AuthInterceptor(prefs: prefs, restClient: this)
     ]);
   }
   RestClient get auth {
