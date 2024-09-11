@@ -72,48 +72,46 @@ class _BoxMapPageState extends State<BoxMapPage>
                 maxZoom: 19,
                 userAgentPackageName: 'com.dev.vini',
               ),
-              Expanded(
-                child: Watch.builder(
-                  builder: (_) => MarkerLayer(
-                    markers: widget.controller.boxList
-                        .map(
-                          (boxElement) => Marker(
-                            height: 32,
-                            alignment: Alignment.center,
-                            point: LatLng(double.parse(boxElement.latitude),
-                                double.parse(boxElement.longitude)),
-                            child: Material(
-                              color: Colors.transparent,
-                              child: InkWell(
-                                borderRadius: BorderRadius.circular(24),
-                                onTap: () => Modular.to.pushNamed("/box/detail",
-                                    arguments: boxElement),
-                                child: Wrap(
-                                  crossAxisAlignment: WrapCrossAlignment.end,
-                                  children: [
-                                    const Icon(
-                                      Icons.room_outlined,
-                                      color: Colors.teal,
-                                    ),
-                                    Text(
-                                      boxElement.label,
-                                      textAlign: TextAlign.start,
-                                      overflow: TextOverflow.fade,
-                                      maxLines: 1,
-                                      softWrap: true,
-                                      style: const TextStyle(
-                                          color: Colors.blue,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w800),
-                                    ),
-                                  ],
-                                ),
+              Watch.builder(
+                builder: (_) => MarkerLayer(
+                  markers: widget.controller.boxList
+                      .map(
+                        (boxElement) => Marker(
+                          height: 32,
+                          alignment: Alignment.center,
+                          point: LatLng(double.parse(boxElement.latitude),
+                              double.parse(boxElement.longitude)),
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(24),
+                              onTap: () => Modular.to.pushNamed("/box/detail",
+                                  arguments: boxElement),
+                              child: Wrap(
+                                crossAxisAlignment: WrapCrossAlignment.end,
+                                children: [
+                                  const Icon(
+                                    Icons.room_outlined,
+                                    color: Colors.teal,
+                                  ),
+                                  Text(
+                                    boxElement.label,
+                                    textAlign: TextAlign.start,
+                                    overflow: TextOverflow.fade,
+                                    maxLines: 1,
+                                    softWrap: true,
+                                    style: const TextStyle(
+                                        color: Colors.blue,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w800),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
-                        )
-                        .toList(),
-                  ),
+                        ),
+                      )
+                      .toList(),
                 ),
               ),
               CurrentLocationLayer()
