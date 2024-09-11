@@ -36,7 +36,8 @@ final class AuthInterceptor extends Interceptor {
       DioException err, ErrorInterceptorHandler handler) async {
     log("Erro no Authentication Token", error: err);
 
-    if (err.response?.statusCode == 401) {
+    if (err.response?.statusCode == 401 &&
+        err.response?.data["message"] == "Jwt Is invalid") {
       try {
         final sp = await _prefs;
         final refreshToken = sp.getString(Constants.refreshToken);

@@ -16,6 +16,7 @@ class AuthModule extends Module {
   void binds(Injector i) {
     i.addLazySingleton<AuthGateway>(AuthGatewayImpl.new);
     i.add(LoginController.new);
+    i.add(RegisterController.new);
   }
 
   @override
