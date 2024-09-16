@@ -119,9 +119,7 @@ class BoxEditController with MessageStateMixin, LoaderControllerMixin {
 
         showSuccess("Sucesso em Salvar a Caixa");
       case Failure(exception: GatewayException(message: String message)):
-        {
-          showError(message);
-        }
+        showError(message);
     }
   }
 }

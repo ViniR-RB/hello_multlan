@@ -5,12 +5,13 @@ import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 final class Messages {
   static void showError(String message, BuildContext context) {
-    showTopSnackBar(
-        Overlay.of(context), CustomSnackBar.error(message: message));
+    showTopSnackBar(Overlay.of(context), CustomSnackBar.error(message: message),
+        persistent: false, displayDuration: const Duration(milliseconds: 1000));
   }
 
   static void showInfo(String message, BuildContext context) {
-    showTopSnackBar(Overlay.of(context), CustomSnackBar.info(message: message));
+    showTopSnackBar(Overlay.of(context), CustomSnackBar.info(message: message),
+        persistent: false, displayDuration: const Duration(milliseconds: 1000));
   }
 
   static void showSuccess(String message, BuildContext context) {
@@ -18,7 +19,9 @@ final class Messages {
         Overlay.of(context),
         CustomSnackBar.success(
           message: message,
-        ));
+        ),
+        displayDuration: const Duration(milliseconds: 1000),
+        persistent: false);
   }
 }
 

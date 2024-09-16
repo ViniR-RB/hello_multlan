@@ -80,6 +80,7 @@ class BoxModel {
 
   BoxModel updatedBox(String label, int filledSpace, int freeSpace,
       List<String> listUser, num signal, String note, String updatedAt) {
+    this.label = label;
     this.filledSpace = filledSpace;
     this.freeSpace = freeSpace;
     listUsers = listUser;

@@ -27,6 +27,11 @@ class BoxFormController with MessageStateMixin, LoaderControllerMixin {
 
   double _latitude = 0.0;
   double _longitude = 0.0;
+  void dispose() {
+    _fileImage.dispose();
+    listClient.dispose();
+    selectedGps.dispose();
+  }
 
   BoxFormController(
       {required BoxGateway gateway,
@@ -80,13 +85,13 @@ class BoxFormController with MessageStateMixin, LoaderControllerMixin {
 
     final result = await _gateway.createBox(boxSaved);
 
+    loader(false);
     switch (result) {
       case Failure(exception: GatewayException(message: final message)):
         showError(message);
       case Sucess():
         showSuccess("Caixa Criada com Sucesso");
     }
-    loader(false);
   }
 
   Future<void> getLocation() async {

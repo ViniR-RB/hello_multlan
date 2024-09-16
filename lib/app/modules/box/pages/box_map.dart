@@ -77,7 +77,8 @@ class _BoxMapPageState extends State<BoxMapPage>
                   markers: widget.controller.boxList
                       .map(
                         (boxElement) => Marker(
-                          height: 32,
+                          height: 100,
+                          width: 100,
                           alignment: Alignment.center,
                           point: LatLng(double.parse(boxElement.latitude),
                               double.parse(boxElement.longitude)),
@@ -88,7 +89,7 @@ class _BoxMapPageState extends State<BoxMapPage>
                               onTap: () => Modular.to.pushNamed("/box/detail",
                                   arguments: boxElement),
                               child: Wrap(
-                                crossAxisAlignment: WrapCrossAlignment.end,
+                                alignment: WrapAlignment.center,
                                 children: [
                                   const Icon(
                                     Icons.room_outlined,

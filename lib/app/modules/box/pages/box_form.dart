@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hellomultlan/app/core/helpers/loader.dart';
 import 'package:hellomultlan/app/core/helpers/messages.dart';
 import 'package:hellomultlan/app/core/theme/app_theme.dart';
@@ -23,16 +24,29 @@ class _BoxFormPageState extends State<BoxFormPage>
   ];
   final formKey = GlobalKey<FormState>();
   final _labelEC = TextEditingController();
-  final _totalClientsEC = TextEditingController(text: "0");
-  final _totalClientsActivatedEC = TextEditingController(text: "0");
+  final _totalClientsEC = TextEditingController();
+  final _totalClientsActivatedEC = TextEditingController();
   final _addressEC = TextEditingController();
-  final _signalEC = TextEditingController(text: "0.0");
+  final _signalEC = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     messageListener(widget.controller);
     loaderListerner(widget.controller);
+  }
+
+  @override
+  void dispose() {
+    messageListener(widget.controller);
+    loaderListerner(widget.controller);
+    widget.controller.dispose();
+    _labelEC.dispose();
+    _totalClientsEC.dispose();
+    _totalClientsActivatedEC.dispose();
+    _addressEC.dispose();
+    _signalEC.dispose();
+    super.dispose();
   }
 
   @override
@@ -76,6 +90,9 @@ class _BoxFormPageState extends State<BoxFormPage>
                       ),
                     ],
                   ),
+                  const SizedBox(
+                    height: 8,
+                  ),
                   Watch.builder(
                     builder: (_) =>
                         switch (widget.controller.fileImage.path.isEmpty) {
@@ -104,10 +121,16 @@ class _BoxFormPageState extends State<BoxFormPage>
                         ),
                       false => InkWell(
                           onTap: () async => await widget.controller.getImage(),
-                          child: CircleAvatar(
-                            radius: 50,
-                            backgroundImage:
-                                FileImage(widget.controller.fileImage),
+                          child: Container(
+                            width: 100, // Diâmetro do círculo
+                            height: 100,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                image: FileImage(widget.controller.fileImage),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                             child: DecoratedBox(
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
@@ -129,6 +152,7 @@ class _BoxFormPageState extends State<BoxFormPage>
                   ),
                   CustomTextField(
                     label: "Rótulo",
+                    labelExample: "20 / 80 Azul",
                     keyboardType: TextInputType.name,
                     controller: _labelEC,
                     validator: Validatorless.multiple(
@@ -142,6 +166,10 @@ class _BoxFormPageState extends State<BoxFormPage>
                   ),
                   CustomTextField(
                     label: "Total de Clientes",
+                    labelExample: "0",
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))
+                    ],
                     keyboardType: TextInputType.number,
                     controller: _totalClientsEC,
                     validator: Validatorless.multiple(
@@ -158,6 +186,11 @@ class _BoxFormPageState extends State<BoxFormPage>
                       builder: (context, totalClientsEC, snapshot) {
                         return CustomTextField(
                             label: "Clientes Ativos",
+                            labelExample: "0",
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'[0-9]'))
+                            ],
                             keyboardType: TextInputType.number,
                             controller: _totalClientsActivatedEC,
                             validator: Validatorless.multiple([
@@ -172,7 +205,12 @@ class _BoxFormPageState extends State<BoxFormPage>
                   ),
                   CustomTextField(
                       label: "Sinal",
-                      keyboardType: TextInputType.number,
+                      labelExample: "0.0",
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*'))
+                      ],
+                      keyboardType:
+                          const TextInputType.numberWithOptions(decimal: true),
                       controller: _signalEC,
                       validator: Validatorless.multiple([
                         Validatorless.required("Campo Requerido"),
@@ -256,12 +294,17 @@ class _BoxFormPageState extends State<BoxFormPage>
                         validator: Validatorless.required("Campo Requerido"),
                         controller: widget.controller.listClient.value[index],
                         decoration: InputDecoration(
-                            suffix: IconButton(
-                          onPressed: () {
-                            widget.controller.removeClient(index);
-                          },
-                          icon: const Icon(Icons.remove_circle_outline),
-                        )),
+                          suffixIconConstraints: const BoxConstraints(
+                            minHeight: 32,
+                            minWidth: 32,
+                          ),
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              widget.controller.removeClient(index);
+                            },
+                            icon: const Icon(Icons.remove_circle_outline),
+                          ),
+                        ),
                         strutStyle: const StrutStyle(
                             height: 1, forceStrutHeight: true, leading: 0),
                       ),

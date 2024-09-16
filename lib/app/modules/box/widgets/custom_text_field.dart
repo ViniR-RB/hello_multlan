@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 class CustomTextField extends StatelessWidget {
   final String label;
+  final String labelExample;
   final TextEditingController controller;
   final String? Function(String?) validator;
   final List<TextInputFormatter>? inputFormatters;
@@ -11,6 +12,7 @@ class CustomTextField extends StatelessWidget {
   const CustomTextField({
     super.key,
     required this.label,
+    required this.labelExample,
     required this.controller,
     required this.validator,
     this.inputFormatters,
@@ -34,16 +36,24 @@ class CustomTextField extends StatelessWidget {
         const SizedBox(
           height: 12,
         ),
-        TextFormField(
-          controller: controller,
-          validator: validator,
-          inputFormatters: inputFormatters,
-          keyboardType: keyboardType,
-          style: const TextStyle(
-              fontWeight: FontWeight.w400,
-              fontSize: 16,
-              overflow: TextOverflow.clip,
-              color: Colors.black),
+        ListenableBuilder(
+          listenable: controller,
+          builder: (context, child) {
+            return TextFormField(
+              controller: controller,
+              validator: validator,
+              inputFormatters: inputFormatters,
+              keyboardType: keyboardType,
+              decoration: InputDecoration(
+                  label: Text(controller.text.isEmpty ? labelExample : label),
+                  labelStyle: TextStyle(color: Colors.grey[500])),
+              style: const TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 16,
+                  overflow: TextOverflow.clip,
+                  color: Colors.black),
+            );
+          },
         ),
       ],
     );

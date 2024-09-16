@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hellomultlan/app/core/helpers/loader.dart';
 import 'package:hellomultlan/app/core/helpers/messages.dart';
 import 'package:hellomultlan/app/core/theme/app_theme.dart';
@@ -58,7 +59,8 @@ class _BoxEditState extends State<BoxEdit>
                 delegate: SliverChildListDelegate([
                   CustomTextField(
                     label: "Rótulo",
-                    keyboardType: TextInputType.number,
+                    labelExample: "20 / 80 Azul",
+                    keyboardType: TextInputType.text,
                     controller: _controller.label,
                     validator: Validatorless.multiple([
                       Validatorless.required("Campo Requerido"),
@@ -69,6 +71,10 @@ class _BoxEditState extends State<BoxEdit>
                   ),
                   CustomTextField(
                     label: "Total de Clientes",
+                    labelExample: "0",
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))
+                    ],
                     keyboardType: TextInputType.number,
                     controller: _controller.totalClientsEC,
                     validator: Validatorless.multiple([
@@ -84,6 +90,10 @@ class _BoxEditState extends State<BoxEdit>
                     builder: (_, totalClientsEC, __) => CustomTextField(
                         label: "Clientes Ativos",
                         keyboardType: TextInputType.number,
+                        labelExample: "0",
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))
+                        ],
                         controller: _controller.totalClientsActivatedEC,
                         validator: Validatorless.multiple([
                           Validatorless.required("Campo Requerido"),
@@ -98,6 +108,10 @@ class _BoxEditState extends State<BoxEdit>
                   ),
                   CustomTextField(
                       label: "Sinal",
+                      labelExample: "0.0",
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*'))
+                      ],
                       keyboardType: TextInputType.number,
                       controller: _controller.signal,
                       validator: Validatorless.multiple([
@@ -138,12 +152,17 @@ class _BoxEditState extends State<BoxEdit>
                           validator: Validatorless.required("Campo Requerido"),
                           controller: _controller.listClient[index],
                           decoration: InputDecoration(
-                              suffix: IconButton(
-                            onPressed: () {
-                              _controller.remomveClient(index);
-                            },
-                            icon: const Icon(Icons.remove_circle_outline),
-                          )),
+                            suffixIconConstraints: const BoxConstraints(
+                              minHeight: 32,
+                              minWidth: 32,
+                            ),
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                _controller.remomveClient(index);
+                              },
+                              icon: const Icon(Icons.remove_circle_outline),
+                            ),
+                          ),
                           strutStyle: const StrutStyle(
                               height: 1, forceStrutHeight: true, leading: 0),
                         ),
