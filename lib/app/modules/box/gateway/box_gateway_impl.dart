@@ -40,7 +40,11 @@ class BoxGatewayImpl implements BoxGateway {
         "file": await MultipartFile.fromFile(file.path,
             filename: file.uri.toString()),
       });
-      await _restClient.auth.post("api/box", data: formData);
+      await _restClient.auth.post("api/box",
+          data: formData,
+          options: Options(headers: {
+            'Content-Type': 'multipart/form-data',
+          }));
 
       return Sucess(unit);
     } on DioException catch (e, s) {
