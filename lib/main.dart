@@ -13,6 +13,7 @@ import "firebase_options.dart";
 
 Future<void> main() async {
   Configuration.validate();
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runZonedGuarded(
       () => runApp(ModularApp(module: AppModule(), child: const AppWidget())),
