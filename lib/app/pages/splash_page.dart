@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:hellomultlan/app/core/configuration/configuration.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -23,9 +24,9 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
         body: Center(
-      child: Text("Hello Multlan"),
+      child: Text("Hello Multlan${Configuration.baseUrl}"),
     ));
   }
 }

@@ -23,7 +23,11 @@
             "name": "hello_multlan (release mode)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "release"
+            "flutterMode": "release",
+            "args": [
+                "--dart-define-from-file",
+                ".env",
+            ]
         }
     ]
 }
