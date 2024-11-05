@@ -55,6 +55,7 @@ class BoxFormController with MessageStateMixin, LoaderControllerMixin {
     int freeSpace,
     num signal,
     String address,
+    String zone,
   ) async {
     if (fileImage.path.isEmpty) {
       showInfo("Selecione uma imagem");
@@ -78,6 +79,7 @@ class BoxFormController with MessageStateMixin, LoaderControllerMixin {
       latitude: _latitude,
       longitude: _longitude,
       signal: signal,
+      zone: zone,
       listUser: List.generate(
           listClient.value.length, (index) => listClient.value[index].text),
       file: fileImage

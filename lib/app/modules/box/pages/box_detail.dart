@@ -96,6 +96,24 @@ class _BoxDetailState extends State<BoxDetail> {
                 ),
                 Row(
                   children: [
+                    const Icon(Icons.sensors),
+                    const SizedBox(
+                      width: 12,
+                    ),
+                    Expanded(
+                      child: Text(widget.controller.boxModel.zone,
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: true,
+                          maxLines: 2,
+                          style: const TextStyle(
+                              overflow: TextOverflow.ellipsis,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500)),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
                     const Icon(Icons.account_box),
                     const SizedBox(
                       width: 12,

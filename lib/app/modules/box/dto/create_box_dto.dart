@@ -8,5 +8,6 @@ typedef CreateBoxDto = ({
   double longitude,
   num signal,
   List<String> listUser,
+  String zone,
   File file,
 });

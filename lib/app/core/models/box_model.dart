@@ -14,6 +14,7 @@ class BoxModel {
   num signal;
   final String createdAt;
   String updatedAt;
+  String zone;
   final String image;
 
   BoxModel({
@@ -29,6 +30,7 @@ class BoxModel {
     required this.createdAt,
     required this.updatedAt,
     required this.image,
+    required this.zone,
   });
 
   BoxModel copyWith({
@@ -44,6 +46,7 @@ class BoxModel {
     String? createdAt,
     String? updatedAt,
     String? image,
+    String? zone,
   }) {
     return BoxModel(
       id: id ?? this.id,
@@ -58,6 +61,7 @@ class BoxModel {
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       image: image ?? this.image,
+      zone: zone ?? this.zone,
     );
   }
 
@@ -75,6 +79,7 @@ class BoxModel {
       'createdAt': createdAt,
       'updatedAt': updatedAt,
       'image': image,
+      "zone": zone,
     };
   }
 
@@ -105,20 +110,28 @@ class BoxModel {
         "createdAt": final String createdAt,
         "updatedAt": final String updatedAt,
         "image": final String image,
+        "zone": final String zone,
       } =>
         BoxModel(
-            id: id,
-            label: label,
-            latitude: latitude,
-            longitude: longitude,
-            listUsers: listUser.map((e) => e.toString()).toList(),
-            note: note,
-            signal: signal.toDouble(),
-            freeSpace: freeSpace,
-            filledSpace: filledSpace,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-            image: image),
+          id: id,
+          label: label,
+          latitude: latitude,
+          longitude: longitude,
+          listUsers: listUser.map((e) => e.toString()).toList(),
+          note: note,
+          signal: signal.toDouble(),
+          freeSpace: freeSpace,
+          filledSpace: filledSpace,
+          createdAt: createdAt,
+          updatedAt: updatedAt,
+          image: image,
+          zone: switch (zone) {
+            "SAFE" => "Zona tranquila",
+            "MODERATE" => "Zona média",
+            "DANGER" => "Zona perigosa",
+            _ => "Zona desconhecida"
+          },
+        ),
       _ => throw ArgumentError("Erro ao Transformar a BoxModel")
     };
   }
@@ -160,6 +173,7 @@ class BoxModel {
         filledSpace.hashCode ^
         createdAt.hashCode ^
         updatedAt.hashCode ^
-        image.hashCode;
+        image.hashCode ^
+        zone.hashCode;
   }
 }

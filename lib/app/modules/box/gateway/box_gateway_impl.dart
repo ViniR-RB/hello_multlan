@@ -27,7 +27,8 @@ class BoxGatewayImpl implements BoxGateway {
         :longitude,
         :signal,
         :file,
-        :listUser
+        :listUser,
+        :zone
       ) = boxSaved;
       final formData = FormData.fromMap({
         "label": label,
@@ -37,6 +38,7 @@ class BoxGatewayImpl implements BoxGateway {
         "longitude": longitude,
         "listUser": listUser,
         "signal": signal,
+        "zone": zone,
         "file": await MultipartFile.fromFile(file.path,
             filename: file.uri.toString()),
       });

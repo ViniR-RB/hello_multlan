@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hellomultlan/app/core/helpers/loader.dart';
 import 'package:hellomultlan/app/core/helpers/messages.dart';
+import 'package:hellomultlan/app/core/helpers/zone.object.dart';
 import 'package:hellomultlan/app/core/theme/app_theme.dart';
 import 'package:hellomultlan/app/modules/box/controllers/box_form_controller.dart';
 import 'package:hellomultlan/app/modules/box/widgets/custom_text_field.dart';
@@ -28,6 +29,7 @@ class _BoxFormPageState extends State<BoxFormPage>
   final _totalClientsActivatedEC = TextEditingController();
   final _addressEC = TextEditingController();
   final _signalEC = TextEditingController();
+  final ValueNotifier<String?> _zoneSelectEC = ValueNotifier<String?>(null);
 
   @override
   void initState() {
@@ -71,7 +73,8 @@ class _BoxFormPageState extends State<BoxFormPage>
                           int.parse(_totalClientsActivatedEC.text),
                           int.parse(_totalClientsEC.text),
                           num.parse(_signalEC.text),
-                          _addressEC.text);
+                          _addressEC.text,
+                          _zoneSelectEC.value!);
                     }
                   },
                   child: const Text("Criar Caixa"))
@@ -216,6 +219,29 @@ class _BoxFormPageState extends State<BoxFormPage>
                         Validatorless.required("Campo Requerido"),
                         Validatorless.number("Signal not a number")
                       ])),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  ValueListenableBuilder<String?>(
+                    valueListenable: _zoneSelectEC,
+                    builder: (context, selectedValue, child) {
+                      return DropdownButtonFormField<String>(
+                        hint: const Text('Selecione uma zona'),
+                        validator: Validatorless.required(
+                            "Por favor, selecione uma zona"),
+                        value: selectedValue,
+                        onChanged: (String? newValue) {
+                          _zoneSelectEC.value = newValue;
+                        },
+                        items: items.map((item) {
+                          return DropdownMenuItem<String>(
+                            value: item['cod'],
+                            child: Text(item['label']!),
+                          );
+                        }).toList(),
+                      );
+                    },
+                  ),
                   const SizedBox(
                     height: 24,
                   ),
