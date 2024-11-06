@@ -80,14 +80,16 @@ class BoxGatewayImpl implements BoxGateway {
         :freeSpace,
         :listClient,
         :signal,
-        :label
+        :label,
+        :zone
       ) = updatedBox;
       final Response(:data) = await _restClient.auth.put("/api/box/$id", data: {
         "label": label,
         "filledSpace": filledSpace,
         "freeSpace": freeSpace,
-        "signal": signal,
-        "listUser": listClient
+        "signal": double.parse(signal.toString()),
+        "listUser": listClient,
+        "zone": zone,
       });
       final boxModel = BoxModel.fromMap(data);
       return Sucess(boxModel);

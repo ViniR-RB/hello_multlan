@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hellomultlan/app/core/helpers/loader.dart';
 import 'package:hellomultlan/app/core/helpers/messages.dart';
+import 'package:hellomultlan/app/core/helpers/zone.object.dart';
 import 'package:hellomultlan/app/core/theme/app_theme.dart';
 import 'package:hellomultlan/app/modules/box/controllers/box_edit_controller.dart';
 import 'package:hellomultlan/app/modules/box/widgets/custom_text_field.dart';
@@ -106,13 +107,48 @@ class _BoxEditState extends State<BoxEdit>
                   const SizedBox(
                     height: 24,
                   ),
+                  ValueListenableBuilder<String?>(
+                    valueListenable: _controller.zoneEC,
+                    builder: (context, selectedValue, child) {
+                      return DropdownButtonFormField<String>(
+                        hint: const Text('Selecione uma zona'),
+                        decoration: const InputDecoration(label: Text("Zona")),
+                        validator: Validatorless.required(
+                            "Por favor, selecione uma zona"),
+                        value: selectedValue,
+                        onChanged: (String? newValue) {
+                          _controller.zoneEC.value = newValue;
+                        },
+                        items: zoneObject.map((item) {
+                          return DropdownMenuItem<String>(
+                            value: item['label'],
+                            child: Text(item['label']!),
+                          );
+                        }).toList(),
+                      );
+                    },
+                  ),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  CustomTextField(
+                      label: "Nota",
+                      labelExample: "Adicionado um Cliente",
+                      keyboardType: TextInputType.text,
+                      controller: _controller.note,
+                      validator: Validatorless.multiple([])),
+                  const SizedBox(
+                    height: 24,
+                  ),
                   CustomTextField(
                       label: "Sinal",
                       labelExample: "0.0",
                       inputFormatters: [
-                        FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*'))
+                        FilteringTextInputFormatter.allow(
+                            RegExp(r'^\d*\.?\d*')),
                       ],
-                      keyboardType: TextInputType.number,
+                      keyboardType:
+                          const TextInputType.numberWithOptions(decimal: true),
                       controller: _controller.signal,
                       validator: Validatorless.multiple([
                         Validatorless.required("Campo Requerido"),

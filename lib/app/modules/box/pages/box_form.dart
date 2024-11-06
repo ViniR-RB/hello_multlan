@@ -233,7 +233,7 @@ class _BoxFormPageState extends State<BoxFormPage>
                         onChanged: (String? newValue) {
                           _zoneSelectEC.value = newValue;
                         },
-                        items: items.map((item) {
+                        items: zoneObject.map((item) {
                           return DropdownMenuItem<String>(
                             value: item['cod'],
                             child: Text(item['label']!),

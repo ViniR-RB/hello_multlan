@@ -83,8 +83,15 @@ class BoxModel {
     };
   }
 
-  BoxModel updatedBox(String label, int filledSpace, int freeSpace,
-      List<String> listUser, num signal, String note, String updatedAt) {
+  BoxModel updatedBox(
+      String label,
+      int filledSpace,
+      int freeSpace,
+      List<String> listUser,
+      num signal,
+      String note,
+      String zone,
+      String updatedAt) {
     this.label = label;
     this.filledSpace = filledSpace;
     this.freeSpace = freeSpace;
@@ -92,6 +99,7 @@ class BoxModel {
     this.note = note;
     this.updatedAt = updatedAt;
     this.signal = signal;
+    this.zone = zone;
     return this;
   }
 
@@ -126,9 +134,9 @@ class BoxModel {
           updatedAt: updatedAt,
           image: image,
           zone: switch (zone) {
-            "SAFE" => "Zona tranquila",
-            "MODERATE" => "Zona média",
-            "DANGER" => "Zona perigosa",
+            "SAFE" => "Zona Segura",
+            "MODERATE" => "Zona Média",
+            "DANGER" => "Zona Perigosa",
             _ => "Zona desconhecida"
           },
         ),

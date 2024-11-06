@@ -6,4 +6,5 @@ typedef UpdatedBoxDto = ({
   List<String> listClient,
   num signal,
   String note,
+  String zone,
 });
