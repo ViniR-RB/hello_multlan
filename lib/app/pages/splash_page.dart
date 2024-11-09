@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:hellomultlan/app/app_controller.dart';
 
 class SplashPage extends StatefulWidget {
-  const SplashPage({super.key});
+  final AppController contoller;
+  const SplashPage({super.key, required this.contoller});
 
   @override
   State<SplashPage> createState() => _SplashPageState();
@@ -10,14 +12,21 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage> {
   Future<void> init() async {
-    Future.delayed(const Duration(seconds: 2), () {
-      Modular.to.navigate("/auth/login");
-    });
+    widget.contoller.checkToken();
   }
 
   @override
   void initState() {
     init();
+    widget.contoller.isAuthenticated.addListener(() {
+      if (widget.contoller.isAuthenticated.value == true) {
+        Modular.to.navigate(
+          "/box/",
+        );
+      } else {
+        Modular.to.navigate("/auth/login");
+      }
+    });
     super.initState();
   }
 

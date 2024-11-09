@@ -16,4 +16,11 @@ class UserModel {
       _ => throw ArgumentError("Erro eo Transformar o Usuário"),
     };
   }
+  Map<String, dynamic> toMap() {
+    return {
+      "id": id,
+      "name": name,
+      "email": email,
+    };
+  }
 }
