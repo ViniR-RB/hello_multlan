@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:hellomultlan/app/core/helpers/loader.dart';
 import 'package:hellomultlan/app/core/helpers/messages.dart';
+import 'package:hellomultlan/app/core/theme/app_colors.dart';
+import 'package:hellomultlan/app/core/widgets/custom_scaffold_primary.dart';
+import 'package:hellomultlan/app/core/widgets/custom_text_field.dart';
+import 'package:hellomultlan/app/core/widgets/logo_widget.dart';
 import 'package:hellomultlan/app/modules/auth/controller/login_controller.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 import 'package:validatorless/validatorless.dart';
@@ -37,24 +41,48 @@ class _LoginPageState extends State<LoginPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('Login'),
+    final Size(:height) = MediaQuery.sizeOf(context);
+    return CustomScaffoldPrimary(
+        child: Stack(
+      children: [
+        const Padding(
+          padding: EdgeInsets.only(top: 75.0),
+          child: Align(alignment: Alignment.topCenter, child: LogoWidget()),
         ),
-        body: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            height: height * 0.6,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(32), topRight: Radius.circular(32)),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 54.0),
               child: Form(
                 key: formKey,
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    TextFormField(
+                    const SizedBox(
+                      height: 42,
+                    ),
+                    Text(
+                      "Faça Login",
+                      style: TextStyle(
+                          fontSize: 34,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.primaryColor),
+                    ),
+                    const SizedBox(
+                      height: 42,
+                    ),
+                    CustomTextField(
+                      label: "E-mail",
+                      labelExample: "Digite um E-mail",
                       controller: _emailEC,
-                      decoration: const InputDecoration(labelText: "Email"),
                       validator: Validatorless.multiple([
                         Validatorless.required("Campo obrigatório"),
                         Validatorless.email("Email inválido"),
@@ -63,33 +91,50 @@ class _LoginPageState extends State<LoginPage>
                     const SizedBox(
                       height: 16,
                     ),
-                    Watch.builder(
-                      builder: (_) => TextFormField(
-                        controller: _passwordEC,
-                        obscureText: widget.controller.isObscurePassword,
-                        validator: Validatorless.multiple([
-                          Validatorless.required("Campo obrigatório"),
-                          Validatorless.min(
-                              8, "Senha deve ter no mínimo 8 caracteres"),
-                        ]),
-                        decoration: InputDecoration(
-                            labelText: "Senha",
-                            suffixIcon: IconButton(
-                              onPressed: () =>
-                                  widget.controller.toogleVisiblePassword(),
-                              icon: Icon(
-                                  widget.controller.isObscurePassword == true
-                                      ? Icons.visibility
-                                      : Icons.visibility_off),
-                            )),
+                    CustomTextField(
+                      label: "Senha",
+                      labelExample: "Digite sua senha",
+                      controller: _passwordEC,
+                      validator: Validatorless.multiple([
+                        Validatorless.required("Campo obrigatório"),
+                        Validatorless.min(
+                            8, "Senha deve ter no mínimo 8 caracteres"),
+                      ]),
+                      isPassword: widget.controller.isObscurePassword,
+                      icon: IconButton(
+                        onPressed: () =>
+                            widget.controller.toogleVisiblePassword(),
+                        icon: Icon(widget.controller.isObscurePassword == true
+                            ? Icons.visibility
+                            : Icons.visibility_off),
                       ),
                     ),
+                    // Watch.builder(
+                    //   builder: (_) => TextFormField(
+                    //     controller: _passwordEC,
+                    //     obscureText: widget.controller.isObscurePassword,
+                    //     validator: Validatorless.multiple([
+                    //       Validatorless.required("Campo obrigatório"),
+                    //       Validatorless.min(
+                    //           8, "Senha deve ter no mínimo 8 caracteres"),
+                    //     ]),
+                    //     decoration: InputDecoration(
+                    //         labelText: "Senha",
+                    //         suffixIcon: IconButton(
+                    //           onPressed: () =>
+                    //               widget.controller.toogleVisiblePassword(),
+                    //           icon: Icon(
+                    //               widget.controller.isObscurePassword == true
+                    //                   ? Icons.visibility
+                    //                   : Icons.visibility_off),
+                    //         )),
+                    //   ),
+                    // ),
                     const SizedBox(
                       height: 24,
                     ),
                     SizedBox(
                       width: MediaQuery.sizeOf(context).width,
-                      height: 52,
                       child: ElevatedButton(
                         onPressed: () async {
                           final valid =
@@ -108,16 +153,21 @@ class _LoginPageState extends State<LoginPage>
                 ),
               ),
             ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: TextButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, "/auth/register");
-                },
-                child: const Text("Criar uma Conta"),
-              ),
+          ),
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: TextButton(
+            onPressed: () {
+              Navigator.pushNamed(context, "/auth/register");
+            },
+            child: const Text(
+              "Não tem uma conta? Cadastre-se!",
+              style: TextStyle(decoration: TextDecoration.underline),
             ),
-          ],
-        ));
+          ),
+        ),
+      ],
+    ));
   }
 }
