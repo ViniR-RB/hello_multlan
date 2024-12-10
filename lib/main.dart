@@ -12,12 +12,13 @@ import 'package:hellomultlan/app/pages/error_page.dart';
 import "firebase_options.dart";
 
 Future<void> main() async {
-  Configuration.validate();
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runZonedGuarded(
-      () => runApp(ModularApp(module: AppModule(), child: const AppWidget())),
-      (error, stack) {
+  runZonedGuarded(() async {
+    Configuration.validate();
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
+    runApp(ModularApp(module: AppModule(), child: const AppWidget()));
+  }, (error, stack) {
     log("Erro Não Tratado", error: error, stackTrace: stack);
     runApp(ErrorPage(message: error.toString()));
   });
