@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:hellomultlan/app/core/theme/app_colors.dart';
+import 'package:hellomultlan/app/core/theme/app_theme.dart';
 
 class CardItem extends StatelessWidget {
   final String label;
+  final String subTitle;
   final IconData iconSuffix;
-  final Color color;
+
   final void Function()? onTap;
   const CardItem({
     super.key,
     required this.label,
+    required this.subTitle,
     required this.iconSuffix,
     required this.onTap,
-    required this.color,
   });
 
   @override
@@ -21,15 +24,11 @@ class CardItem extends StatelessWidget {
       child: Container(
         width: MediaQuery.sizeOf(context).width,
         margin: const EdgeInsets.only(top: 16),
-        height: 76,
+        height: 87,
         decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: Colors.black,
-            width: 1,
-          ),
-        ),
+            color: AppColors.cardColor,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [AppTheme.boxShadowDefault]),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
@@ -38,14 +37,33 @@ class CardItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    label,
-                    style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.w500),
+                  const SizedBox(
+                    width: 16,
                   ),
-                  Icon(iconSuffix),
+                  Icon(
+                    iconSuffix,
+                    size: 42,
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  Text.rich(TextSpan(
+                    text: "$label\n",
+                    children: [
+                      TextSpan(
+                          text: subTitle,
+                          style: const TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.w200))
+                    ],
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.w600),
+                  )),
+                  const Spacer(),
+                  const Icon(
+                    Icons.chevron_right,
+                    size: 42,
+                  ),
                 ],
               )
             ],
