@@ -55,7 +55,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
             // BoxShadow Background
             Container(
               decoration: BoxDecoration(
-                color: Colors.white,
                 borderRadius: BorderRadius.circular(12.0),
                 boxShadow: [AppTheme.boxShadowDefault],
               ),
@@ -64,15 +63,18 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 inputFormatters: widget.inputFormatters,
                 keyboardType: widget.keyboardType,
                 obscureText: widget.isPassword ? _obscureText : false,
+                showCursor: true,
                 decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
                   contentPadding: const EdgeInsets.symmetric(
                     vertical: 16,
                     horizontal: 20,
                   ),
-                  labelText: widget.controller.text.isEmpty
+                  hintText: widget.controller.text.isEmpty
                       ? widget.labelExample
                       : widget.label,
-                  labelStyle: TextStyle(color: Colors.grey[500], fontSize: 12),
+                  hintStyle: TextStyle(color: Colors.grey[400], fontSize: 12),
                   suffixIcon: widget.isPassword
                       ? IconButton(
                           onPressed: () {
@@ -93,7 +95,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide(
-                      color: Colors.grey.shade300,
+                      color: Colors.grey.shade400,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(

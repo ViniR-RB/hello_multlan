@@ -28,8 +28,8 @@ class AuthGatewayImpl implements AuthGateway {
     } on DioException catch (e, s) {
       log("Erro ao fazer Login", error: e, stackTrace: s);
       return switch (e) {
-        DioException(response: Response(statusCode: 403)) =>
-          Failure(GatewayException("Email ou Senha Incorretos")),
+        DioException(response: Response(statusCode: 404)) =>
+          Failure(GatewayException("Email ou Senha Incorreto")),
         _ => Failure(GatewayException("Erro ao fazer Login"))
       };
     }
