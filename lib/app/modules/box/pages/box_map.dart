@@ -4,7 +4,10 @@ import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:hellomultlan/app/core/helpers/loader.dart';
 import 'package:hellomultlan/app/core/helpers/messages.dart';
+import 'package:hellomultlan/app/core/widgets/custom_app_bar_primary.dart';
+import 'package:hellomultlan/app/modules/box/controllers/box_edit_controller.dart';
 import 'package:hellomultlan/app/modules/box/controllers/box_map_controller.dart';
+import 'package:hellomultlan/app/modules/box/widgets/box_details_bottom_sheet.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 
@@ -46,15 +49,21 @@ class _BoxMapPageState extends State<BoxMapPage>
       floatingActionButton: FloatingActionButton(
           onPressed: () => Modular.to.pushNamed("/box/form"),
           child: const Icon(Icons.add)),
-      appBar: AppBar(
-        title: const Text("Mapa de Ctos"),
-        actions: [
-          IconButton(
-              onPressed: () async => await widget.controller.getAllBoxs(),
-              icon: const Icon(Icons.refresh)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
-        ],
-      ),
+      appBar: CustomAppBar(title: 'Mapa de Ctos'),
+      // appBar: AppBar(
+      //   title: const Text("Mapa de Ctos"),
+      //   flexibleSpace: Container(
+      //     decoration: const BoxDecoration(
+      //         image: DecorationImage(
+      //             image: AssetImage("assets/img/background_1.png"))),
+      //   ),
+      //   actions: [
+      //     IconButton(
+      //         onPressed: () async => await widget.controller.getAllBoxs(),
+      //         icon: const Icon(Icons.refresh)),
+      //     IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+      //   ],
+      // ),
       body: Stack(
         children: [
           FlutterMap(
@@ -86,8 +95,13 @@ class _BoxMapPageState extends State<BoxMapPage>
                             color: Colors.transparent,
                             child: InkWell(
                               borderRadius: BorderRadius.circular(24),
-                              onTap: () => Modular.to.pushNamed("/box/detail",
-                                  arguments: boxElement),
+                              onTap: () =>
+                                  BoxDetailsBottomSheet.showBottomSheetBox(
+                                      boxElement,
+                                      BoxEditController(
+                                          boxModel: boxElement,
+                                          gateway: Modular.get()),
+                                      context),
                               child: Wrap(
                                 alignment: WrapAlignment.center,
                                 children: [

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
+import 'package:hellomultlan/app/core/widgets/custom_scaffold_foregroud.dart';
 import 'package:hellomultlan/app/modules/box/controllers/box_edit_controller.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 
@@ -23,142 +23,137 @@ class _BoxDetailState extends State<BoxDetail> {
   @override
   Widget build(BuildContext context) {
     final Size(:width, :height) = MediaQuery.of(context).size;
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            onPressed: () =>
-                Modular.to.pushNamed("/box/edit", arguments: widget.controller),
-            icon: const Icon(Icons.mode_edit),
-          ),
-        ],
-      ),
-      body: Watch.builder(
+    return CustomScaffoldForegroud(
+      child: Watch.builder(
         builder: (_) => Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(
+                height: 56,
+              ),
+              ClipRRect(
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(12),
+                ),
+                child: SizedBox(
                   width: width,
-                  height: height * 0.5,
-                  decoration: const BoxDecoration(),
+                  height: 256,
                   child: InteractiveViewer(
-                    maxScale: 5,
+                    panEnabled: true,
+                    scaleEnabled: true,
                     child: Image.network(
                       widget.controller.boxModel.image,
-                      fit: BoxFit.scaleDown,
+                      fit: BoxFit.fitWidth,
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 16,
-                ),
-                Row(
-                  children: [
-                    const Icon(Icons.area_chart),
-                    const SizedBox(
-                      width: 12,
-                    ),
-                    Text(widget.controller.boxModel.label,
-                        style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w500)),
-                  ],
-                ),
-                Row(
-                  children: [
-                    const Icon(
-                      Icons.people,
-                      size: 24,
-                    ),
-                    const SizedBox(
-                      width: 12,
-                    ),
-                    Text(
-                        "Espaço total: ${widget.controller.boxModel.freeSpace}",
-                        style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w500)),
-                  ],
-                ),
-                Row(
-                  children: [
-                    const Icon(Icons.menu),
-                    const SizedBox(
-                      width: 12,
-                    ),
-                    Text(
-                      "Clientes Ativos: ${widget.controller.boxModel.filledSpace}",
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              Row(
+                children: [
+                  const Icon(Icons.area_chart),
+                  const SizedBox(
+                    width: 12,
+                  ),
+                  Text(widget.controller.boxModel.label,
                       style: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.w500),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    const Icon(Icons.sensors),
-                    const SizedBox(
-                      width: 12,
-                    ),
-                    Expanded(
-                      child: Text(widget.controller.boxModel.zone,
-                          overflow: TextOverflow.ellipsis,
-                          softWrap: true,
-                          maxLines: 2,
-                          style: const TextStyle(
-                              overflow: TextOverflow.ellipsis,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500)),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    const Icon(Icons.account_box),
-                    const SizedBox(
-                      width: 12,
-                    ),
-                    Expanded(
-                      child: Text(
-                          widget.controller.boxModel.listUsers.toString(),
-                          overflow: TextOverflow.ellipsis,
-                          softWrap: true,
-                          maxLines: 2,
-                          style: const TextStyle(
-                              overflow: TextOverflow.ellipsis,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500)),
-                    ),
-                  ],
-                ),
-                Visibility(
-                  visible: widget.controller.boxModel.note?.isNotEmpty ?? false,
-                  child: Row(
-                    children: [
-                      const Icon(Icons.update),
-                      const SizedBox(
-                        width: 12,
-                      ),
-                      Text(widget.controller.boxModel.note ?? "",
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500))
-                    ],
+                          fontSize: 16, fontWeight: FontWeight.w500)),
+                ],
+              ),
+              Row(
+                children: [
+                  const Icon(
+                    Icons.people,
+                    size: 24,
                   ),
-                ),
-                Row(
+                  const SizedBox(
+                    width: 12,
+                  ),
+                  Text("Espaço total: ${widget.controller.boxModel.freeSpace}",
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w500)),
+                ],
+              ),
+              Row(
+                children: [
+                  const Icon(Icons.menu),
+                  const SizedBox(
+                    width: 12,
+                  ),
+                  Text(
+                    "Clientes Ativos: ${widget.controller.boxModel.filledSpace}",
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w500),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  const Icon(Icons.sensors),
+                  const SizedBox(
+                    width: 12,
+                  ),
+                  Expanded(
+                    child: Text(widget.controller.boxModel.zone,
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: true,
+                        maxLines: 2,
+                        style: const TextStyle(
+                            overflow: TextOverflow.ellipsis,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500)),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  const Icon(Icons.account_box),
+                  const SizedBox(
+                    width: 12,
+                  ),
+                  Expanded(
+                    child: Text(widget.controller.boxModel.listUsers.toString(),
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: true,
+                        maxLines: 2,
+                        style: const TextStyle(
+                            overflow: TextOverflow.ellipsis,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500)),
+                  ),
+                ],
+              ),
+              Visibility(
+                visible: widget.controller.boxModel.note?.isNotEmpty ?? false,
+                child: Row(
                   children: [
-                    const Icon(Icons.signal_wifi_4_bar),
+                    const Icon(Icons.update),
                     const SizedBox(
                       width: 12,
                     ),
-                    Text(
-                        "Sinal: ${widget.controller.boxModel.signal.toString()}",
+                    Text(widget.controller.boxModel.note ?? "",
                         style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w500))
                   ],
                 ),
-              ],
-            ),
+              ),
+              Row(
+                children: [
+                  const Icon(Icons.signal_wifi_4_bar),
+                  const SizedBox(
+                    width: 12,
+                  ),
+                  Text("Sinal: ${widget.controller.boxModel.signal.toString()}",
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w500))
+                ],
+              ),
+            ],
           ),
         ),
       ),
