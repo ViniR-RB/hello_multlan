@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hellomultlan/app/core/constants/images.dart';
 
 class CustomScaffoldPrimary extends StatelessWidget {
   final PreferredSizeWidget? customAppBar;
@@ -14,7 +15,7 @@ class CustomScaffoldPrimary extends StatelessWidget {
         decoration: const BoxDecoration(
           image: DecorationImage(
               opacity: 0.45,
-              image: AssetImage("assets/img/background_1.png"),
+              image: AssetImage(ImagesConstants.scaffoldBackgroundImage),
               fit: BoxFit.cover),
         ),
         child: child,

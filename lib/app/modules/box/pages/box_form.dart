@@ -1,9 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hellomultlan/app/core/helpers/loader.dart';
 import 'package:hellomultlan/app/core/helpers/messages.dart';
 import 'package:hellomultlan/app/core/helpers/zone.object.dart';
+import 'package:hellomultlan/app/core/theme/app_colors.dart';
 import 'package:hellomultlan/app/core/theme/app_theme.dart';
+import 'package:hellomultlan/app/core/widgets/custom_scaffold_foregroud.dart';
 import 'package:hellomultlan/app/modules/box/controllers/box_form_controller.dart';
 import 'package:hellomultlan/app/modules/box/widgets/custom_text_field.dart';
 import 'package:signals_flutter/signals_flutter.dart';
@@ -31,31 +35,55 @@ class _BoxFormPageState extends State<BoxFormPage>
   final _signalEC = TextEditingController();
   final ValueNotifier<String?> _zoneSelectEC = ValueNotifier<String?>(null);
 
+  void addOrRemoveClientAutomatic() {
+    final totalClientsActivated =
+        int.tryParse(_totalClientsActivatedEC.text) ?? 0;
+    final int totalClientesEC = widget.controller.listClient.value.length;
+    if (totalClientsActivated < widget.controller.listClient.value.length) {
+      final int difference =
+          widget.controller.listClient.value.length - totalClientsActivated;
+      for (int i = difference; i > 0; i--) {
+        widget.controller.removeClient(i - 1);
+      }
+    }
+    if (totalClientsActivated > widget.controller.listClient.value.length) {
+      final int difference =
+          totalClientsActivated - widget.controller.listClient.value.length;
+      for (int i = difference; i > 0; i--) {
+        widget.controller.addNewClient();
+      }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     messageListener(widget.controller);
     loaderListerner(widget.controller);
+    _totalClientsActivatedEC.addListener(addOrRemoveClientAutomatic);
   }
 
   @override
   void dispose() {
-    messageListener(widget.controller);
-    loaderListerner(widget.controller);
-    widget.controller.dispose();
-    _labelEC.dispose();
-    _totalClientsEC.dispose();
-    _totalClientsActivatedEC.dispose();
-    _addressEC.dispose();
-    _signalEC.dispose();
-    super.dispose();
+    try {
+      _labelEC.dispose();
+      _totalClientsEC.dispose();
+      _totalClientsActivatedEC.dispose();
+      _addressEC.dispose();
+      _signalEC.dispose();
+      widget.controller.dispose();
+      super.dispose();
+    } catch (e, s) {
+      debugPrint('Erro ao descartar ValueNotifier: $e');
+      log('Stack trace:', stackTrace: s);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
-    return Scaffold(
-        body: Form(
+    return CustomScaffoldForegroud(
+        child: Form(
       key: formKey,
       child: CustomScrollView(
         slivers: [
@@ -88,7 +116,7 @@ class _BoxFormPageState extends State<BoxFormPage>
                   Row(
                     children: [
                       Text(
-                        "Imagem de Perfil",
+                        "Adicionar foto",
                         style: AppTheme.labelInput,
                       ),
                     ],
@@ -116,7 +144,7 @@ class _BoxFormPageState extends State<BoxFormPage>
                               ),
                             ),
                             child: IconButton(
-                              icon: const Icon(Icons.camera_alt),
+                              icon: const Icon(Icons.view_in_ar_outlined),
                               onPressed: () async =>
                                   await widget.controller.getImage(),
                             ),
@@ -307,40 +335,44 @@ class _BoxFormPageState extends State<BoxFormPage>
               ),
             ),
           ),
-          Watch.builder(
-            builder: (context) => SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(
-                        left: 24.0, right: 24.0, bottom: 12.0),
-                    child: SizedBox(
-                      height: 52,
-                      child: TextFormField(
-                        validator: Validatorless.required("Campo Requerido"),
-                        controller: widget.controller.listClient.value[index],
-                        decoration: InputDecoration(
-                          suffixIconConstraints: const BoxConstraints(
-                            minHeight: 32,
-                            minWidth: 32,
-                          ),
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              widget.controller.removeClient(index);
-                            },
-                            icon: const Icon(Icons.remove_circle_outline),
+          ValueListenableBuilder(
+              valueListenable: widget.controller.listClient,
+              builder: (context, value, child) {
+                return SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(
+                            left: 24.0, right: 24.0, bottom: 12.0),
+                        child: SizedBox(
+                          height: 52,
+                          child: TextFormField(
+                            validator:
+                                Validatorless.required("Campo Requerido"),
+                            controller: value[index],
+                            decoration: InputDecoration(
+                              suffixIconConstraints: const BoxConstraints(
+                                minHeight: 32,
+                                minWidth: 32,
+                              ),
+                              suffixIcon: IconButton(
+                                onPressed: () {
+                                  widget.controller.removeClient(index);
+                                },
+                                icon: Icon(Icons.remove_circle_outline,
+                                    color: AppColors.primaryColor),
+                              ),
+                            ),
+                            strutStyle: const StrutStyle(
+                                height: 1, forceStrutHeight: true, leading: 0),
                           ),
                         ),
-                        strutStyle: const StrutStyle(
-                            height: 1, forceStrutHeight: true, leading: 0),
-                      ),
-                    ),
-                  );
-                },
-                childCount: widget.controller.listClient.value.length,
-              ),
-            ),
-          ),
+                      );
+                    },
+                    childCount: widget.controller.listClient.value.length,
+                  ),
+                );
+              })
         ],
       ),
     ));

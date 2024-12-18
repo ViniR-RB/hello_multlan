@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:hellomultlan/app/core/constants/images.dart';
 import 'package:hellomultlan/app/core/theme/app_colors.dart';
 
 class CustomAppBar extends PreferredSize {
@@ -37,7 +38,8 @@ class CustomAppBarContent extends StatelessWidget {
       decoration: const BoxDecoration(
         image: DecorationImage(
           opacity: 0.45,
-          image: AssetImage('assets/img/background_1.png'), // URL da imagem
+          image: AssetImage(
+              ImagesConstants.scaffoldBackgroundImage), // URL da imagem
           fit: BoxFit.fitWidth, // Garantir que a imagem cubra toda a área
         ),
       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:hellomultlan/app/core/constants/images.dart';
 import 'package:hellomultlan/app/core/extensions/number_pad.dart';
 import 'package:hellomultlan/app/core/models/box_model.dart';
 import 'package:hellomultlan/app/core/theme/app_colors.dart';
@@ -18,7 +19,7 @@ sealed class BoxDetailsBottomSheet {
         ),
       ),
       builder: (context) {
-        final Size(:width, :height) = MediaQuery.sizeOf(context);
+        final Size(:width) = MediaQuery.sizeOf(context);
         return Container(
           decoration: const BoxDecoration(
             color: Colors.white,
@@ -27,7 +28,7 @@ sealed class BoxDetailsBottomSheet {
             ),
             image: DecorationImage(
               opacity: 0.1,
-              image: AssetImage("assets/img/background_1.png"),
+              image: AssetImage(ImagesConstants.scaffoldBackgroundImage),
               fit: BoxFit.cover,
             ),
           ),
@@ -49,14 +50,13 @@ sealed class BoxDetailsBottomSheet {
                 ),
               ),
               DraggableScrollableSheet(
-                initialChildSize: 0.7, // Ocupa 90% da tela
-                minChildSize: 0.7,
+                initialChildSize: 0.8,
+                minChildSize: 0.8,
                 maxChildSize: 1,
                 builder: (context, scrollController) => Expanded(
                   child: ListView(
                     controller: scrollController,
                     children: [
-                      // Imagem do Box
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 24),
                         child: ClipRRect(
@@ -79,7 +79,6 @@ sealed class BoxDetailsBottomSheet {
                         ),
                       ),
 
-                      // Título de Informações
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 24, vertical: 16),
@@ -93,7 +92,6 @@ sealed class BoxDetailsBottomSheet {
                         ),
                       ),
 
-                      // Grid de Informações
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 24),
                         child: GridView.count(
@@ -121,34 +119,16 @@ sealed class BoxDetailsBottomSheet {
                               label: "Sinal:",
                               value: box.signal.toStringAsFixed(1),
                             ),
+                            Visibility(
+                              replacement: const SizedBox.shrink(),
+                              child: BoxFieldDetail(
+                                label: "Nota",
+                                value: box.note ?? "",
+                              ),
+                            )
                           ],
                         ),
                       ),
-
-                      // Nota (se existir)
-                      if (controller.boxModel.note?.isNotEmpty ?? false)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 24, vertical: 16),
-                          child: Row(
-                            children: [
-                              Icon(Icons.update, color: AppColors.primaryColor),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Text(
-                                  controller.boxModel.note ?? "",
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-
                       // Botão de Edição
                       Padding(
                         padding: const EdgeInsets.all(24),

@@ -48,7 +48,7 @@ class CustomTextField extends StatelessWidget {
                   label: Text(controller.text.isEmpty ? labelExample : label),
                   labelStyle: TextStyle(color: Colors.grey[500])),
               style: const TextStyle(
-                  fontWeight: FontWeight.w400,
+                  fontWeight: FontWeight.bold,
                   fontSize: 16,
                   overflow: TextOverflow.clip,
                   color: Colors.black),

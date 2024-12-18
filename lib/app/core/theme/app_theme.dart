@@ -30,6 +30,8 @@ sealed class AppTheme {
     appBarTheme: const AppBarTheme(centerTitle: true),
     iconTheme: IconThemeData(color: AppColors.primaryColor),
     inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: const Color(0xFFFAFAFA),
         border: _border.copyWith(
           borderSide: const BorderSide(
             color: Colors.white,
@@ -62,6 +64,6 @@ sealed class AppTheme {
   static TextStyle labelInput = const TextStyle(
       fontWeight: FontWeight.bold,
       fontSize: 16,
-      color: Color(0xFF262626),
-      letterSpacing: 1.5);
+      color: Color(0xFF000000),
+      letterSpacing: 0);
 }

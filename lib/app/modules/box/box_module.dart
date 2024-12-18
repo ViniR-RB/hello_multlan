@@ -20,7 +20,7 @@ class BoxModule extends Module {
   @override
   void binds(Injector i) {
     i.addLazySingleton<BoxGateway>(BoxGatewayImpl.new);
-    i.addLazySingleton(BoxFormController.new);
+    i.add(BoxFormController.new);
     i.addLazySingleton(BoxMapController.new);
     i.add(() =>
         BoxEditController(boxModel: Modular.args.data, gateway: Modular.get()));

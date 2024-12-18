@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:hellomultlan/app/core/constants/images.dart';
 import 'package:hellomultlan/app/core/helpers/loader.dart';
 import 'package:hellomultlan/app/core/helpers/messages.dart';
 import 'package:hellomultlan/app/core/widgets/custom_app_bar_primary.dart';
@@ -50,20 +51,6 @@ class _BoxMapPageState extends State<BoxMapPage>
           onPressed: () => Modular.to.pushNamed("/box/form"),
           child: const Icon(Icons.add)),
       appBar: CustomAppBar(title: 'Mapa de Ctos'),
-      // appBar: AppBar(
-      //   title: const Text("Mapa de Ctos"),
-      //   flexibleSpace: Container(
-      //     decoration: const BoxDecoration(
-      //         image: DecorationImage(
-      //             image: AssetImage("assets/img/background_1.png"))),
-      //   ),
-      //   actions: [
-      //     IconButton(
-      //         onPressed: () async => await widget.controller.getAllBoxs(),
-      //         icon: const Icon(Icons.refresh)),
-      //     IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
-      //   ],
-      // ),
       body: Stack(
         children: [
           FlutterMap(
@@ -105,10 +92,7 @@ class _BoxMapPageState extends State<BoxMapPage>
                               child: Wrap(
                                 alignment: WrapAlignment.center,
                                 children: [
-                                  const Icon(
-                                    Icons.room_outlined,
-                                    color: Colors.teal,
-                                  ),
+                                  Image.asset(ImagesConstants.markIcon),
                                   Text(
                                     boxElement.label,
                                     textAlign: TextAlign.start,

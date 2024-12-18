@@ -19,18 +19,20 @@ class BoxFormController with MessageStateMixin, LoaderControllerMixin {
   final BoxGateway _gateway;
   final ImagePickerService _imagePickerService;
   final GeolocatorService _geolocatorService;
+
   final _fileImage = ValueSignal<File>(File(""));
   File get fileImage => _fileImage();
-  final ValueSignal<List<TextEditingController>> listClient =
-      ValueSignal<List<TextEditingController>>([]);
+  final ValueNotifier<List<TextEditingController>> listClient =
+      ValueNotifier<List<TextEditingController>>([]);
   final selectedGps = ValueSignal<List<bool>>([true, false]);
 
   double _latitude = 0.0;
   double _longitude = 0.0;
+
   void dispose() {
     _fileImage.dispose();
-    listClient.dispose();
     selectedGps.dispose();
+    listClient.dispose();
   }
 
   BoxFormController(
@@ -66,12 +68,12 @@ class BoxFormController with MessageStateMixin, LoaderControllerMixin {
           "Quantidade de Nome de Clientes deve ser igual ao número de clientes ativos");
       return;
     }
+    loader(true);
     if (selectedGps.value[0]) {
       await getLocation();
     } else {
       await getLocationByAddres(address);
     }
-    loader(true);
     final boxSaved = (
       label: label,
       filledSpace: filledSpace,
@@ -109,12 +111,14 @@ class BoxFormController with MessageStateMixin, LoaderControllerMixin {
   }
 
   void addNewClient() {
-    listClient.forceUpdate([...listClient.value, TextEditingController()]);
+    listClient.value = [...listClient.value, TextEditingController()];
   }
 
   void removeClient(int index) {
-    listClient.value.removeAt(index);
-    listClient.set(force: true, [...listClient.value]);
+    final updatedList = [...listClient.value];
+    updatedList[index].dispose();
+    updatedList.removeAt(index);
+    listClient.value = updatedList;
   }
 
   Future<void> getLocationByAddres(String address) async {
