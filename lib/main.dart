@@ -8,6 +8,7 @@ import 'package:hellomultlan/app/app_module.dart';
 import 'package:hellomultlan/app/app_widget.dart';
 import 'package:hellomultlan/app/core/configuration/configuration.dart';
 import 'package:hellomultlan/app/pages/error_page.dart';
+import 'package:timeago_flutter/timeago_flutter.dart' as timeago;
 
 import "firebase_options.dart";
 
@@ -15,6 +16,7 @@ Future<void> main() async {
   runZonedGuarded(() async {
     Configuration.validate();
     WidgetsFlutterBinding.ensureInitialized();
+    timeago.setLocaleMessages("pt_br", timeago.PtBrMessages());
     await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform);
     runApp(ModularApp(module: AppModule(), child: const AppWidget()));
