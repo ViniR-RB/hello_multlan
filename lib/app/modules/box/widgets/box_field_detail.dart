@@ -7,24 +7,22 @@ class BoxFieldDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          Text(
-            value,
-            overflow: TextOverflow.clip,
-            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w200),
-          ),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+        ),
+        const SizedBox(
+          height: 8,
+        ),
+        Text(
+          value,
+          overflow: TextOverflow.clip,
+          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w200),
+        ),
+      ],
     );
   }
 }
