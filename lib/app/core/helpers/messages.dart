@@ -61,6 +61,12 @@ mixin MessageStateMixin {
       clearSuccess();
     });
   }
+
+  void disposeMessages() {
+    _errorMessage.dispose();
+    _infoMessage.dispose();
+    _successMessage.dispose();
+  }
 }
 
 mixin MessageViewMixin<T extends StatefulWidget> on State<T> {

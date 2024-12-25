@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:hellomultlan/app/app_controller.dart';
+import 'package:hellomultlan/app/core/widgets/button_sheet_error.dart';
 import 'package:hellomultlan/app/core/widgets/custom_scaffold_primary.dart';
 import 'package:hellomultlan/app/core/widgets/logo_widget.dart';
 
@@ -15,7 +16,8 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   final ValueNotifier<double> _opacityNotifier = ValueNotifier(0.0);
   Future<void> init() async {
-    _animatedLogo().then((value) async => await widget.contoller.checkToken());
+    await _animatedLogo();
+    await widget.contoller.healthCheckApi();
   }
 
   Future<void> _animatedLogo() async {
@@ -24,18 +26,28 @@ class _SplashPageState extends State<SplashPage> {
     });
   }
 
+  redirectUser() {
+    if (widget.contoller.isAuthenticated.value == true) {
+      Modular.to.navigate(
+        "/box/",
+      );
+    } else {
+      Modular.to.navigate("/auth/login");
+    }
+  }
+
+  showButtonSheet() {
+    if (widget.contoller.apiOffline.value == true) {
+      BottomSheetError.showBottomSheetBox(
+          context, () async => await widget.contoller.healthCheckApi());
+    }
+  }
+
   @override
   void initState() {
     init();
-    widget.contoller.isAuthenticated.addListener(() {
-      if (widget.contoller.isAuthenticated.value == true) {
-        Modular.to.navigate(
-          "/box/",
-        );
-      } else {
-        Modular.to.navigate("/auth/login");
-      }
-    });
+    widget.contoller.isAuthenticated.addListener(redirectUser);
+    widget.contoller.apiOffline.addListener(showButtonSheet);
     super.initState();
   }
 

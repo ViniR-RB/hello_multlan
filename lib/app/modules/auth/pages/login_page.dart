@@ -159,18 +159,6 @@ class _LoginPageState extends State<LoginPage>
             ),
           ),
         ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: TextButton(
-            onPressed: () {
-              Navigator.pushNamed(context, "/auth/register");
-            },
-            child: const Text(
-              "Não tem uma conta? Cadastre-se!",
-              style: TextStyle(decoration: TextDecoration.underline),
-            ),
-          ),
-        ),
       ],
     ));
   }

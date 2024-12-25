@@ -5,11 +5,13 @@ import 'package:hellomultlan/app/core/theme/app_colors.dart';
 
 class CustomAppBar extends PreferredSize {
   final String title;
-  CustomAppBar({Key? key, required this.title})
+  final List<Widget>? actions;
+  CustomAppBar({Key? key, required this.title, this.actions})
       : super(
           key: key,
           preferredSize: const Size.fromHeight(96),
           child: AppBar(
+            actions: actions,
             title: Text(title),
             leading: Modular.to.canPop()
                 ? IconButton(

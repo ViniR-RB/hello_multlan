@@ -19,6 +19,18 @@ class AppController {
   final ValueNotifier<bool?> _isAuthenticated = ValueNotifier<bool?>(null);
   ValueNotifier<bool?> get isAuthenticated => _isAuthenticated;
 
+  final ValueNotifier<bool> _logout = ValueNotifier<bool>(false);
+  ValueNotifier<bool> get logout => _logout;
+
+  final ValueNotifier<bool> _apiOffline = ValueNotifier<bool>(false);
+  ValueNotifier<bool> get apiOffline => _apiOffline;
+
+  Future<void> clearSpAndRedirect() async {
+    final shared = await _sp;
+    await shared.clear();
+    _logout.value = true;
+  }
+
   Future<void> checkToken() async {
     final shared = await _sp;
 
@@ -36,6 +48,19 @@ class AppController {
         _isAuthenticated.value = true;
       case Failure(:final exception):
         _isAuthenticated.value = false;
+    }
+  }
+
+  Future<void> healthCheckApi() async {
+    _apiOffline.value = false;
+    final result = await _gateway.healthCheck();
+
+    switch (result) {
+      case Sucess():
+        _apiOffline.value = false;
+        checkToken();
+      case Failure():
+        _apiOffline.value = true;
     }
   }
 }

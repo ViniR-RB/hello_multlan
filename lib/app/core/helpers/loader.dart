@@ -32,6 +32,14 @@ final class Loader {
         null;
     }
   }
+
+  static void disposeLoader() {
+    if (_isShowing) {
+      _overlayEntry?.remove();
+      _overlayEntry = null;
+      _isShowing = false;
+    }
+  }
 }
 
 mixin LoaderControllerMixin {
@@ -43,6 +51,10 @@ mixin LoaderControllerMixin {
   void loader(bool showLoader) {
     _clearLoader();
     _showLoader.set(showLoader);
+  }
+
+  void disposeLoader() {
+    _showLoader.dispose();
   }
 }
 
