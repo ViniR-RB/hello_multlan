@@ -6,7 +6,6 @@ import 'package:hellomultlan/app/core/constants/images.dart';
 import 'package:hellomultlan/app/core/helpers/loader.dart';
 import 'package:hellomultlan/app/core/helpers/messages.dart';
 import 'package:hellomultlan/app/core/widgets/custom_app_bar_primary.dart';
-import 'package:hellomultlan/app/modules/box/controllers/box_edit_controller.dart';
 import 'package:hellomultlan/app/modules/box/controllers/box_map_controller.dart';
 import 'package:hellomultlan/app/modules/box/widgets/box_details_bottom_sheet.dart';
 import 'package:latlong2/latlong.dart';
@@ -50,7 +49,14 @@ class _BoxMapPageState extends State<BoxMapPage>
       floatingActionButton: FloatingActionButton(
           onPressed: () => Modular.to.pushNamed("/box/form"),
           child: const Icon(Icons.add)),
-      appBar: CustomAppBar(title: 'Mapa de Ctos'),
+      appBar: CustomAppBar(
+        title: 'Mapa de Ctos',
+        actions: [
+          IconButton(
+              onPressed: () async => await widget.controller.getAllBoxs(),
+              icon: const Icon(Icons.replay_outlined))
+        ],
+      ),
       body: Stack(
         children: [
           FlutterMap(
@@ -84,11 +90,7 @@ class _BoxMapPageState extends State<BoxMapPage>
                               borderRadius: BorderRadius.circular(24),
                               onTap: () =>
                                   BoxDetailsBottomSheet.showBottomSheetBox(
-                                      boxElement,
-                                      BoxEditController(
-                                          boxModel: boxElement,
-                                          gateway: Modular.get()),
-                                      context),
+                                      boxElement, context),
                               child: Wrap(
                                 alignment: WrapAlignment.center,
                                 children: [

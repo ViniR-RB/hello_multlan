@@ -1,12 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:hellomultlan/app/app_controller.dart';
 import 'package:hellomultlan/app/core/theme/app_colors.dart';
 import 'package:hellomultlan/app/core/widgets/custom_scaffold_foregroud.dart';
 import 'package:hellomultlan/app/modules/box/widgets/card_item.dart';
 
-class BoxHub extends StatelessWidget {
-  const BoxHub({super.key});
+class BoxHub extends StatefulWidget {
+  final AppController controller;
+
+  const BoxHub({super.key, required this.controller});
+
+  @override
+  State<BoxHub> createState() => _BoxHubState();
+}
+
+class _BoxHubState extends State<BoxHub> {
+  _logout() {
+    if (widget.controller.logout.value == true) {
+      Modular.to.navigate("/");
+    }
+  }
+
+  @override
+  void initState() {
+    widget.controller.logout.addListener(_logout);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    widget.controller.logout.removeListener(_logout);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +64,12 @@ class BoxHub extends StatelessWidget {
           subTitle: "Adicionar nova caixa",
           onTap: () => Modular.to.pushNamed("/box/form"),
           iconSuffix: Icons.view_in_ar_outlined,
+        ),
+        CardItem(
+          label: "Sair",
+          subTitle: "Fazer Logout",
+          onTap: () async => await widget.controller.clearSpAndRedirect(),
+          iconSuffix: Icons.logout,
         ),
       ],
     ));

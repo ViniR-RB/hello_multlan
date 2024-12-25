@@ -23,7 +23,7 @@ class BoxModule extends Module {
     i.add(BoxFormController.new);
     i.addLazySingleton(BoxMapController.new);
     i.add(() =>
-        BoxEditController(boxModel: Modular.args.data, gateway: Modular.get()));
+        BoxEditController(boxModel: i.args.data, gateway: i.get<BoxGateway>()));
   }
 
   @override
@@ -31,12 +31,14 @@ class BoxModule extends Module {
 
   @override
   void routes(RouteManager r) {
-    r.child(Modular.initialRoute, child: (_) => const BoxHub());
+    r.child(Modular.initialRoute,
+        child: (_) => BoxHub(
+              controller: Modular.get(),
+            ));
     r.child("/map", child: (_) => BoxMapPage(controller: Modular.get()));
     r.child("/form", child: (_) => BoxFormPage(controller: Modular.get()));
     r.child("/detail", child: (_) => BoxDetail(controller: Modular.get()));
     r.child("/edit",
-        child: (_) => BoxEdit(controller: Modular.args.data),
-        maintainState: false);
+        child: (_) => BoxEdit(controller: Modular.get()), maintainState: false);
   }
 }

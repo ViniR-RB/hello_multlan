@@ -5,12 +5,10 @@ import 'package:hellomultlan/app/core/extensions/number_pad.dart';
 import 'package:hellomultlan/app/core/extensions/timeago.dart';
 import 'package:hellomultlan/app/core/models/box_model.dart';
 import 'package:hellomultlan/app/core/theme/app_colors.dart';
-import 'package:hellomultlan/app/modules/box/controllers/box_edit_controller.dart';
 import 'package:hellomultlan/app/modules/box/widgets/box_field_detail.dart';
 
 sealed class BoxDetailsBottomSheet {
-  static void showBottomSheetBox(
-      BoxModel box, BoxEditController controller, BuildContext context) {
+  static void showBottomSheetBox(BoxModel box, BuildContext context) {
     showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -44,7 +42,7 @@ sealed class BoxDetailsBottomSheet {
                         panEnabled: true,
                         scaleEnabled: true,
                         child: Image.network(
-                          controller.boxModel.image,
+                          box.image,
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) =>
                               const Center(
@@ -110,7 +108,7 @@ sealed class BoxDetailsBottomSheet {
                   child: ElevatedButton(
                     onPressed: () => Modular.to.pushNamed(
                       "/box/edit",
-                      arguments: controller,
+                      arguments: box,
                     ),
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 50),

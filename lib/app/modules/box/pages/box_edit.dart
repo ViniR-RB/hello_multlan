@@ -4,6 +4,8 @@ import 'package:hellomultlan/app/core/helpers/loader.dart';
 import 'package:hellomultlan/app/core/helpers/messages.dart';
 import 'package:hellomultlan/app/core/helpers/zone.object.dart';
 import 'package:hellomultlan/app/core/theme/app_theme.dart';
+import 'package:hellomultlan/app/core/widgets/custom_app_bar_sliver.dart';
+import 'package:hellomultlan/app/core/widgets/custom_scaffold_foregroud.dart';
 import 'package:hellomultlan/app/modules/box/controllers/box_edit_controller.dart';
 import 'package:hellomultlan/app/modules/box/widgets/custom_text_field.dart';
 import 'package:signals_flutter/signals_flutter.dart';
@@ -24,33 +26,31 @@ class _BoxEditState extends State<BoxEdit>
   @override
   void initState() {
     _controller = widget.controller;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        messageListener(_controller);
-        loaderListerner(_controller);
-      }
-    });
-
+    messageListener(_controller);
+    loaderListerner(_controller);
     super.initState();
   }
 
   @override
+  void dispose() {
+    _controller.disposeLoader();
+    _controller.disposeMessages();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Form(
+    return CustomScaffoldForegroud(
+      child: Form(
         key: _controller.formKey,
         child: CustomScrollView(
           slivers: [
-            SliverAppBar(
-              title: const Text("Editar Caixa"),
-              floating: true,
-              snap: true,
+            CustomSliverAppBar(
+              title: "Editar Caixa",
               actions: [
-                TextButton(
-                    onPressed: () async {
-                      await _controller.validateForm();
-                    },
-                    child: const Text("Salvar Caixa"))
+                IconButton(
+                    onPressed: () async => await _controller.validateForm(),
+                    icon: const Icon(Icons.save))
               ],
             ),
             SliverPadding(
@@ -99,9 +99,6 @@ class _BoxEditState extends State<BoxEdit>
                         validator: Validatorless.multiple([
                           Validatorless.required("Campo Requerido"),
                           Validatorless.number("Clientes Ativos não é número"),
-                          Validatorless.max(
-                              int.tryParse(totalClientsEC.text) ?? 0,
-                              "Clientes Ativos não pode ser maior que o espaço disponível")
                         ])),
                   ),
                   const SizedBox(
@@ -133,7 +130,7 @@ class _BoxEditState extends State<BoxEdit>
                   ),
                   CustomTextField(
                       label: "Nota",
-                      labelExample: "Adicionado um Cliente",
+                      labelExample: "Adicione uma atualização",
                       keyboardType: TextInputType.text,
                       controller: _controller.note,
                       validator: Validatorless.multiple([])),
@@ -208,6 +205,17 @@ class _BoxEditState extends State<BoxEdit>
                   childCount: _controller.listClient.length,
                 ),
               ),
+            ),
+            SliverPadding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32),
+              sliver: SliverList(
+                  delegate: SliverChildListDelegate([
+                ElevatedButton(
+                  onPressed: () async => await _controller.validateForm(),
+                  child: const Text("Salvar Caixa"),
+                ),
+              ])),
             ),
           ],
         ),
