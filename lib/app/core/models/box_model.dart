@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:hellomultlan/app/core/configuration/configuration.dart';
 
 class BoxModel {
   final String id;
@@ -132,7 +133,7 @@ class BoxModel {
           filledSpace: filledSpace,
           createdAt: createdAt,
           updatedAt: updatedAt,
-          image: image,
+          image: Configuration.publicStorage + image,
           zone: switch (zone) {
             "SAFE" => "Zona Segura",
             "MODERATE" => "Zona Média",
